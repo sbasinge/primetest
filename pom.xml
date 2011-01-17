@@ -1,0 +1,115 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.examples</groupId>
+	<artifactId>primetest2</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>Primefaces JSF</name>
+	<description>Primefaces JSF</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<arquillian.version>1.0.0.Alpha4</arquillian.version>
+		<glassfish.embedded.version>3.1-b04</glassfish.embedded.version>
+		<junit.version>4.8.1</junit.version>
+		<slf4j.version>1.5.9.RC1</slf4j.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>prime-repo</id>
+			<name>Prime Technology Maven Repository</name>
+			<url>http://repository.prime.com.tr</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>2.2.RC2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian</groupId>
+			<artifactId>arquillian-junit</artifactId>
+			<version>${arquillian.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<dependency>
+			<groupId>apache-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.7.1.1</version>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<profiles>
+		<profile>
+			<id>glassfish-embedded-3</id>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+
+			<dependencies>
+				<dependency>
+					<groupId>org.jboss.arquillian.container</groupId>
+					<artifactId>arquillian-glassfish-embedded-3</artifactId>
+					<version>${arquillian.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.glassfish.extras</groupId>
+					<artifactId>glassfish-embedded-all</artifactId>
+					<version>${glassfish.embedded.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+</project>
