@@ -6,81 +6,116 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 <f:view contentType="text/html">
-<h:head>
-	<title>Cabin Finder</title>
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-			<p:resource name="/jquery/plugins/rating/jquery.rating.pack.js"/>
-		<p:resource name="/jquery/plugins/rating/jquery.rating.pack.js"/>
-		<p:resource name="/primefaces/rating/rating.js"/>
-		<p:resource name="/jquery/plugins/rating/jquery.rating.css"/>
+	<h:head>
+		<title>Cabin Finder</title>
+		<script type="text/javascript"
+			src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<p:resource name="/jquery/plugins/rating/jquery.rating.pack.js" />
+		<p:resource name="/jquery/plugins/rating/jquery.rating.pack.js" />
+		<p:resource name="/primefaces/rating/rating.js" />
+		<p:resource name="/jquery/plugins/rating/jquery.rating.css" />
 		<p:resources></p:resources>
-</h:head>
+	</h:head>
 
-<h:body>
-	<h:form id="mainForm">
-					<p:dock position="top">
-					<p:menuitem value="Home" icon="/images/dock/home.png" url="/cabins/search.jsf" />
-					<p:menuitem value="Music" icon="/images/dock/music.png" url="/cabins/simpleSearch.jsf" />
-					<p:menuitem value="Video" icon="/images/dock/video.png" url="#" />
-					<p:menuitem value="Email" icon="/images/dock/email.png" url="#" />
-					<p:menuitem value="Link" icon="/images/dock/link.png" url="#" />
-					<p:menuitem value="RSS" icon="/images/dock/rss.png" url="#" />
-					<p:menuitem value="History" icon="/images/dock/history.png" url="#" />
-				</p:dock>
-	
-		<h:outputLabel value="City" for="city" />
-		<h:inputText id="city" value="#{cabinSearchBean.cabin.address.city}" />
-		<h:outputLabel value="State" for="state" />
-		<h:selectOneMenu id="state"	value="#{cabinSearchBean.cabin.address.state}" converter="StateEnumConverter">
-			<f:selectItems value="#{factories.states}" var="aState" itemLabel="#{aState.name}" />
-		</h:selectOneMenu>
-		<p:commandButton id="searchButton" action="#{cabinSearchBean.search}" value="Search" update="cabinList, mapPanel" >
-			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-		</p:commandButton>
-		<h:commandButton action="#{testDataGenerator.loadTestData}" value="Add Test Data" />
-		<p:outputPanel id="cabinList" >
-			<p:dataTable id="cabinTable" value="#{cabinSearchBean.cabins}" var="_cabin" >
-				<p:column>
-					<f:facet name="header">Name</f:facet>
-					<h:outputText value="#{_cabin.name}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">City</f:facet>
-					<h:outputText value="#{_cabin.address.city}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">State</f:facet>
-					<h:outputText value="#{_cabin.address.state.name}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">Nightly Rate</f:facet>
-					<h:outputText value="#{_cabin.rentalTerms.nightlyRental}">
-						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" type="currency"/>
-					</h:outputText>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Rating</f:facet>
-					<h:outputText value="#{_cabin.averageRating}">
-						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number"/>
-					</h:outputText>
-				</p:column>
-			</p:dataTable>
-		</p:outputPanel>
-		<p:rating id="test" value="#{cabinSearchBean.defaultRating}"></p:rating>
-		<p:outputPanel id="mapPanel">
-					<p:gmap id="map" center="#{cabinSearchBean.mapCenter.lat},#{cabinSearchBean.mapCenter.lng}" zoom="10" type="HYBRID" style="width:100%;height:740px" model="#{cabinSearchBean.mapModel}" overlaySelectListener="#{cabinSearchBean.onMarkerSelect}" rendered="#{not empty cabinSearchBean.cabins}">
-						<p:gmapInfoWindow id="mapInfo">  
-					    	<p:outputPanel id="mapInfoPanel" style="text-align:center;display:block;margin:auto:">  
-					            <h:outputText id="markerTitle" value="#{cabinSearchBean.marker.title}" />
-					            <br/>
-					            <h:outputLabel id="ratingLabel" value="Average Customer Rating: "  for="markerData"/>
-					            <p:rating id="markerData" value="#{cabinSearchBean.defaultRating}"  disabled="true"/>
-					            
-					       	</p:outputPanel>  
-						</p:gmapInfoWindow>
-					</p:gmap>  
-		</p:outputPanel>
-	</h:form>
-</h:body>
+	<h:body>
+		<h:form id="mainForm">
+			<p:dock position="top">
+				<p:menuitem value="Home" icon="/images/dock/home.png"
+					url="/cabins/search.jsf" />
+				<p:menuitem value="Music" icon="/images/dock/music.png"
+					url="/cabins/simpleSearch.jsf" />
+				<p:menuitem value="Video" icon="/images/dock/video.png" url="#" />
+				<p:menuitem value="Email" icon="/images/dock/email.png" url="#" />
+				<p:menuitem value="Link" icon="/images/dock/link.png" url="#" />
+				<p:menuitem value="RSS" icon="/images/dock/rss.png" url="#" />
+				<p:menuitem value="History" icon="/images/dock/history.png" url="#" />
+			</p:dock>
+
+			<h:outputLabel value="City" for="city" />
+			<h:inputText id="city" value="#{cabinSearchBean.cabin.address.city}" />
+			<h:outputLabel value="State" for="state" />
+			<h:selectOneMenu id="state"
+				value="#{cabinSearchBean.cabin.address.state}"
+				converter="StateEnumConverter">
+				<f:selectItems value="#{factories.states}" var="aState"
+					itemLabel="#{aState.name}" />
+			</h:selectOneMenu>
+			<p:commandButton id="searchButton" action="#{cabinSearchBean.search}"
+				value="Search" update="cabinList, mapPanel">
+				<f:param name="cid"
+					value="#{javax.enterprise.context.conversation.id}" />
+			</p:commandButton>
+			<h:commandButton action="#{testDataGenerator.loadTestData}"
+				value="Add Test Data" />
+			<p:outputPanel id="cabinList">
+				<p:dataTable id="cabinTable" value="#{cabinSearchBean.cabins}"
+					var="_cabin">
+					<p:column>
+						<f:facet name="header">Name</f:facet>
+						<h:outputText value="#{_cabin.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">City</f:facet>
+						<h:outputText value="#{_cabin.address.city}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">State</f:facet>
+						<h:outputText value="#{_cabin.address.state.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Nightly Rate</f:facet>
+						<h:outputText value="#{_cabin.rentalTerms.nightlyRental}">
+							<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+								currencySymbol="$" type="currency" />
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Rating</f:facet>
+						<h:outputText value="#{_cabin.averageRating}">
+							<f:convertNumber maxFractionDigits="2" minFractionDigits="0"
+								type="number" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+			<p:rating id="test" value="#{cabinSearchBean.defaultRating}"></p:rating>
+			<p:outputPanel id="mapPanel">
+				<p:gmap id="map"
+					center="#{cabinSearchBean.mapCenter.lat},#{cabinSearchBean.mapCenter.lng}"
+					zoom="10" type="HYBRID" style="width:100%;height:740px"
+					model="#{cabinSearchBean.mapModel}"
+					overlaySelectListener="#{cabinSearchBean.onMarkerSelect}"
+					rendered="#{not empty cabinSearchBean.cabins}">
+					<p:gmapInfoWindow id="mapInfo">
+						<p:outputPanel id="mapInfoPanel" style="text-align:center;display:block;margin:auto:">
+							<span id="mainForm:test">
+								<span class="star-rating-control">
+									<ui:repeat var="" value=""></ui:repeat>
+									<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="1">1</a></div>
+									<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="2">2</a></div>
+									<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="3">3</a></div>
+									<div class="star-rating rater-0 star-rating-applied star-rating-live"><a title="4">4</a></div>
+									<div class="star-rating rater-0 star-rating-applied star-rating-live"><a title="5">5</a></div>
+								</span>
+							</span>
+							<script type="text/javascript">widget_mainForm_test = new PrimeFaces.widget.Rating('mainForm:test',{hasRateListener:false});</script>
+
+
+
+							<h:outputText id="markerTitle"
+								value="#{cabinSearchBean.marker.title}" />
+							<br />
+							<h:outputLabel id="ratingLabel" value="Average Customer Rating: "
+								for="markerData" />
+								<span id="pleaseformatme"><input name="mainForm:markerData_input" type="radio" value="1" disabled="disabled"/><input name="mainForm:markerData_input" type="radio" value="2" disabled="disabled"/><input name="mainForm:markerData_input" type="radio" value="3" disabled="disabled"/><input name="mainForm:markerData_input" type="radio" value="4" disabled="disabled"/><input name="mainForm:markerData_input" type="radio" value="5" disabled="disabled"/></span>
+								
+
+						</p:outputPanel>
+					</p:gmapInfoWindow>
+				</p:gmap>
+							<script type="text/javascript">console.log('here');markerTest = new PrimeFaces.widget.Rating('pleaseformatme',{hasRateListener:false});</script>
+			</p:outputPanel>
+		</h:form>
+	</h:body>
 </f:view>
 </html>

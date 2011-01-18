@@ -56,8 +56,17 @@ public class CabinSearchBean implements Serializable {
     private State state;
 
 	private Marker marker;
-    private java.lang.Double defaultRating = 3.0;
+    private java.lang.Double defaultRating = 2.5;
+    private java.lang.Double maxStars = 5d;
     
+	public java.lang.Double getMaxStars() {
+		return maxStars;
+	}
+
+	public void setMaxStars(java.lang.Double maxStars) {
+		this.maxStars = maxStars;
+	}
+
 	@PostConstruct
 	public void init() {
 		cabin = new Cabin();
