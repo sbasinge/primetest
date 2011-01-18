@@ -56,6 +56,7 @@ public class CabinSearchBean implements Serializable {
     private State state;
 
 	private Marker marker;
+    private java.lang.Double defaultRating = 3.0;
     
 	@PostConstruct
 	public void init() {
@@ -147,5 +148,13 @@ public class CabinSearchBean implements Serializable {
       
     public Marker getMarker() {  
         return marker;  
-    }  
+    }
+
+	public void setDefaultRating(java.lang.Double defaultRating) {
+		this.defaultRating = defaultRating;
+	}
+
+	public java.lang.Double getDefaultRating() {
+		return defaultRating;
+	}  
 }
