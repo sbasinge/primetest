@@ -10,6 +10,7 @@ import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -25,6 +26,7 @@ import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 import org.eclipse.persistence.queries.ReadAllQuery;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.event.map.OverlaySelectEvent;  
 import org.primefaces.model.map.DefaultMapModel;  
 import org.primefaces.model.map.LatLng;  
@@ -54,7 +56,8 @@ public class CabinSearchBean implements Serializable {
     private MapModel mapModel; 
     private LatLng mapCenter;
     private State state;
-
+    private Cabin selectedCabin;
+    
 	private Marker marker;
     private java.lang.Double defaultRating = 2.5;
     private java.lang.Double maxStars = 5d;
@@ -165,5 +168,30 @@ public class CabinSearchBean implements Serializable {
 
 	public java.lang.Double getDefaultRating() {
 		return defaultRating;
+	}
+
+	public void setSelectedCabin(Cabin selectedCabin) {
+		this.selectedCabin = selectedCabin;
+		log.info("Cabin selected {}",selectedCabin);
+	}
+
+	public Cabin getSelectedCabin() {
+		return selectedCabin;
 	}  
+	
+	@SuppressWarnings("unchecked")
+	public List<Cabin> getAllCabins() {
+		return db.createNamedQuery("findAllCabins").getResultList();
+	}
+	
+    public String onRowSelectNavigate(SelectEvent event) {  
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedCabin", event.getObject());  
+        log.info("redirecting");
+        return "edit.jsf?faces-redirect=true";  
+    }  
+    
+    public String saveUpdates() {
+    	db.persist(selectedCabin);
+        return "list.jsf?faces-redirect=true";  
+    }
 }

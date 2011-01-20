@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -18,7 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Entity
-@NamedQuery(name = "findMatchingCabins", query = "select c from Cabin c where c.address.state = :state")
+@NamedQueries(value={
+	@NamedQuery(name = "findMatchingCabins", query = "select c from Cabin c where c.address.state = :state"),
+	@NamedQuery(name = "findAllCabins", query = "select c from Cabin c")
+})
 public class Cabin extends AbstractEntity {
 	Logger log = LoggerFactory.getLogger(Cabin.class);
 

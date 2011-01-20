@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui" template="/layouts/template.xhtml">
+
+	<ui:define name="content">
+		<p:outputPanel id="cabinList">
+			<p:dataTable id="cabinTable" value="#{cabinSearchBean.allCabins}" var="_cabin" paginator="true" selection="#{cabinSearchBean.selectedCabin}" selectionMode="single"  
+                 rowSelectListener="#{cabinSearchBean.onRowSelectNavigate}" dblClickSelect="true">
+				<p:column>
+					<f:facet name="header">Name</f:facet>
+					<h:outputText value="#{_cabin.name}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">City</f:facet>
+					<h:outputText value="#{_cabin.address.city}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">State</f:facet>
+					<h:outputText value="#{_cabin.address.state.name}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Nightly Rate</f:facet>
+					<h:outputText value="#{_cabin.rentalTerms.nightlyRental}">
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" type="currency" />
+					</h:outputText>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Rating</f:facet>
+					<h:outputText value="#{_cabin.averageRating}">
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>

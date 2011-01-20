@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui" template="/layouts/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:outputLabel value="City" for="city" />
+		<h:inputText id="city" value="#{cabinSearchBean.selectedCabin.address.city}" />
+		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="State" for="state" />
+		<h:selectOneMenu id="state" value="#{cabinSearchBean.selectedCabin.address.state}" converter="StateEnumConverter">
+			<f:selectItems value="#{factories.states}" var="aState" itemLabel="#{aState.name}" />
+		</h:selectOneMenu>
+		<p:spacer height="10px" width="100%"/>
+		<p:commandButton id="saveButton" action="#{testDataGenerator.loadTestData}" value="Save">
+			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+		</p:commandButton>
+		<p:spacer height="10px" width="100%"/>
+	</ui:define>
+</ui:composition>
