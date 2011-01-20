@@ -1,23 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
 	  xmlns:p="http://primefaces.prime.com.tr/ui">
+<f:view contentType="text/html">
 	  
-<head>
+<h:head>
 	<title>Cabin Finder</title>
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-</head>
+	<ui:insert name="heading">...</ui:insert>
+</h:head>
 
-<body>
+<h:body>
 	<h:form id="masterForm">
 		<div id="topNav">
 			<p:dock position="top">
 				<p:menuitem value="Home" icon="/images/dock/home.png" url="/cabins/search.jsf" />
-				<p:menuitem value="Music" icon="/images/dock/music.png" url="/cabins/simpleSearch.jsf" />
-				<p:menuitem value="Video" icon="/images/dock/video.png" url="#" />
+				<p:menuitem value="Maintenance" icon="/images/dock/music.png" url="/cabins/simpleSearch.jsf" />
+				<p:menuitem value="Super Simple" icon="/images/dock/video.png" url="/cabins/superSimpleSearch.jsf" />
 				<p:menuitem value="Email" icon="/images/dock/email.png" url="#" />
 				<p:menuitem value="Link" icon="/images/dock/link.png" url="#" />
 				<p:menuitem value="RSS" icon="/images/dock/rss.png" url="#" />
@@ -28,12 +27,12 @@
 			<ui:insert name="leftmenu"/>
 		</div>
 		<div id="content">
-			<ui:insert name="body"/>
+			<ui:insert name="content"/>
 		</div>
 	</h:form>
-</body>
+</h:body>
 <!-- 
 <a4j:loadScript src="/resource/content/assets/ga.js" rendered="#{Environment.production}"/>
  -->
- 
+</f:view> 
 </html>

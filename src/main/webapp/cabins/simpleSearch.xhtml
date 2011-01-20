@@ -78,7 +78,7 @@
 					</p:column>
 				</p:dataTable>
 			</p:outputPanel>
-			<p:rating id="test" value="#{cabinSearchBean.defaultRating}"></p:rating>
+			<p:rating id="test" value="#{cabinSearchBean.defaultRating}" rendered="false"></p:rating>
 			<p:outputPanel id="mapPanel">
 				<p:gmap id="map"
 					center="#{cabinSearchBean.mapCenter.lat},#{cabinSearchBean.mapCenter.lng}"
@@ -128,7 +128,6 @@
 									
 								</span>
 							</span>
-							<script type="text/javascript">widget_mainForm_test = new PrimeFaces.widget.Rating('mainForm:test',{hasRateListener:false});</script>
 						</p:outputPanel>
 					</p:gmapInfoWindow>
 				</p:gmap>

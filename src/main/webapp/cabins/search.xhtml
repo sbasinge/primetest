@@ -1,57 +1,111 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:s="http://jboss.com/products/seam/taglib"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:rich="http://richfaces.org/rich"
-	xmlns:a4j="http://richfaces.org/a4j" 
-	xmlns:p="http://primefaces.prime.com.tr/ui"
-	template="/layouts/template.xhtml">
-<f:view contentType="text/html">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui" template="/layouts/template.xhtml">
+
+
+<ui:define name="heading">
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script type="text/javascript" src="#{request.contextPath}/js/rating.js"></script>
+			<p:resource name="/jquery/plugins/rating/jquery.rating.pack.js" />
+		<p:resource name="/jquery/plugins/rating/jquery.rating.pack.js" />
+		<p:resource name="/primefaces/rating/rating.js" />
+		<p:resource name="/jquery/plugins/rating/jquery.rating.css" />
 	
-<ui:define name="leftmenu">
-		<h:outputLabel value="City" for="city" />
-		<h:inputText id="city" value="#{cabinSearchBean.cabin.address.city}" />
-		<h:outputLabel value="State" for="state" />
-		<h:selectOneMenu id="state"	value="#{cabinSearchBean.cabin.address.state}" converter="StateEnumConverter">
-			<f:selectItems value="#{factories.states}" var="aState" itemLabel="#{aState.name}" />
-		</h:selectOneMenu>
-		<p:commandButton id="searchButton" action="#{cabinSearchBean.search}" value="Search" update="cabinList, mapPanel" >
-			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-		</p:commandButton>
-		<h:commandButton action="#{testDataGenerator.loadTestData}" value="Add Test Data" />
-		<p:outputPanel id="cabinList" >
-			<p:dataTable id="cabinTable" value="#{cabinSearchBean.cabins}" var="_cabin" >
-				<p:column>
-					<f:facet name="header">Name</f:facet>
-					<h:outputText value="#{_cabin.name}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">City</f:facet>
-					<h:outputText value="#{_cabin.address.city}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">State</f:facet>
-					<h:outputText value="#{_cabin.address.state.name}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">Nightly Rate</f:facet>
-					<h:outputText value="#{_cabin.rentalTerms.nightlyRental}">
-						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" type="currency"/>
-					</h:outputText>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Rating</f:facet>
-					<h:outputText value="#{_cabin.averageRating}">
-						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number"/>
-					</h:outputText>
-				</p:column>
-			</p:dataTable>
-		</p:outputPanel>
 </ui:define>
-<ui:define name="body">
-</ui:define>
-</f:view>
+		<ui:define name="leftmenu">
+			<h:outputLabel value="City" for="city" />
+			<h:inputText id="city" value="#{cabinSearchBean.cabin.address.city}" />
+			<h:outputLabel value="State" for="state" />
+			<h:selectOneMenu id="state" value="#{cabinSearchBean.cabin.address.state}" converter="StateEnumConverter">
+				<f:selectItems value="#{factories.states}" var="aState" itemLabel="#{aState.name}" />
+			</h:selectOneMenu>
+			<p:commandButton id="searchButton" action="#{cabinSearchBean.search}" value="Search" update="cabinList, mapPanel">
+				<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+			</p:commandButton>
+			<p:outputPanel id="cabinList">
+				<p:dataTable id="cabinTable" value="#{cabinSearchBean.cabins}" var="_cabin">
+					<p:column>
+						<f:facet name="header">Name</f:facet>
+						<h:outputText value="#{_cabin.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">City</f:facet>
+						<h:outputText value="#{_cabin.address.city}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">State</f:facet>
+						<h:outputText value="#{_cabin.address.state.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Nightly Rate</f:facet>
+						<h:outputText value="#{_cabin.rentalTerms.nightlyRental}">
+							<f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" type="currency" />
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Rating</f:facet>
+						<h:outputText value="#{_cabin.averageRating}">
+							<f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+		</ui:define>
+		<ui:define name="content">
+			<p:outputPanel id="mapPanel">
+				<p:rating id="test" value="#{cabinSearchBean.defaultRating}" rendered="false"></p:rating>
+				<p:gmap id="map" center="#{cabinSearchBean.mapCenter.lat},#{cabinSearchBean.mapCenter.lng}" zoom="10" type="HYBRID"
+					style="width:100%;height:740px" model="#{cabinSearchBean.mapModel}"
+					overlaySelectListener="#{cabinSearchBean.onMarkerSelect}" rendered="#{not empty cabinSearchBean.cabins}">
+					<p:gmapInfoWindow id="mapInfo">
+						<p:outputPanel id="mapInfoPanel" style="text-align:center;display:block;margin:auto:">
+							<h:outputText id="markerTitle" value="#{cabinSearchBean.marker.title}" />
+							<br />
+							<h:outputLabel id="ratingLabel" value="Average Rating: " for="test" />
+							<span id="test">
+								<span class="star-rating-control">
+									<ui:repeat value="#{cabinSearchBean.marker.data}" var="_temp">
+										<p:outputPanel rendered="#{_temp ge 1}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="1">1</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 1}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a	title="1">1</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp ge 2}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="2">2</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 2}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a	title="2">2</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp ge 3}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="3">3</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 3}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a	title="3">3</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp ge 4}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a title="4">4</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 4}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a title="4">4</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp ge 5}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a title="5">5</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 5}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a title="5">5</a></div>
+										</p:outputPanel>
+									</ui:repeat>
+									
+								</span>
+							</span>
+						</p:outputPanel>
+					</p:gmapInfoWindow>
+				</p:gmap>
+			</p:outputPanel>
+
+		</ui:define>
 </ui:composition>
