@@ -88,32 +88,50 @@
 					rendered="#{not empty cabinSearchBean.cabins}">
 					<p:gmapInfoWindow id="mapInfo">
 						<p:outputPanel id="mapInfoPanel" style="text-align:center;display:block;margin:auto:">
+							<h:outputText id="markerTitle"	value="#{cabinSearchBean.marker.title}" />
+							<br />
+							<h:outputLabel id="ratingLabel" value="Average Rating: " for="mainForm:test" />
 							<span id="mainForm:test">
 								<span class="star-rating-control">
-									<ui:repeat var="" value=""></ui:repeat>
-									<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="1">1</a></div>
-									<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="2">2</a></div>
-									<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="3">3</a></div>
-									<div class="star-rating rater-0 star-rating-applied star-rating-live"><a title="4">4</a></div>
-									<div class="star-rating rater-0 star-rating-applied star-rating-live"><a title="5">5</a></div>
+									<ui:repeat value="#{cabinSearchBean.marker.data}" var="_temp">
+										<p:outputPanel rendered="#{_temp ge 1}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="1">1</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 1}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a	title="1">1</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp ge 2}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="2">2</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 2}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a	title="2">2</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp ge 3}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a	title="3">3</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 3}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a	title="3">3</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp ge 4}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a title="4">4</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 4}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a title="4">4</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp ge 5}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a title="5">5</a></div>
+										</p:outputPanel>
+										<p:outputPanel rendered="#{_temp lt 5}">
+											<div class="star-rating rater-0 star-rating-applied star-rating-live"><a title="5">5</a></div>
+										</p:outputPanel>
+									</ui:repeat>
+									
 								</span>
 							</span>
 							<script type="text/javascript">widget_mainForm_test = new PrimeFaces.widget.Rating('mainForm:test',{hasRateListener:false});</script>
-
-
-
-							<h:outputText id="markerTitle"
-								value="#{cabinSearchBean.marker.title}" />
-							<br />
-							<h:outputLabel id="ratingLabel" value="Average Customer Rating: "
-								for="markerData" />
-								<span id="pleaseformatme"><input name="mainForm:markerData_input" type="radio" value="1" disabled="disabled"/><input name="mainForm:markerData_input" type="radio" value="2" disabled="disabled"/><input name="mainForm:markerData_input" type="radio" value="3" disabled="disabled"/><input name="mainForm:markerData_input" type="radio" value="4" disabled="disabled"/><input name="mainForm:markerData_input" type="radio" value="5" disabled="disabled"/></span>
-								
-
 						</p:outputPanel>
 					</p:gmapInfoWindow>
 				</p:gmap>
-							<script type="text/javascript">console.log('here');markerTest = new PrimeFaces.widget.Rating('pleaseformatme',{hasRateListener:false});</script>
 			</p:outputPanel>
 		</h:form>
 	</h:body>

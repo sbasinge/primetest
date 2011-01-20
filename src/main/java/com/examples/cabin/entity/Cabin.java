@@ -118,8 +118,8 @@ public class Cabin extends AbstractEntity {
 		this.reviews = reviews;
 	}
 
-	public double getAverageRating() {
-		double retval = 0;
+	public Double getAverageRating() {
+		Double retval = 0d;
 		double totalRating = 0;
 		double totalReviews = 0;
 		for (Review review : getReviews()) {
