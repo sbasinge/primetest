@@ -7,8 +7,11 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -26,9 +29,9 @@ import org.slf4j.LoggerFactory;
 public class Cabin extends AbstractEntity {
 	Logger log = LoggerFactory.getLogger(Cabin.class);
 
-	@Id
-	@GeneratedValue
-	int id;
+//	@Id
+//	@GeneratedValue(strategy=GenerationType.IDENTITY)
+//	int id;
 
 	String name;
 	String url;
@@ -37,7 +40,8 @@ public class Cabin extends AbstractEntity {
 	boolean hotTub;
 	boolean firePit;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="ADDRESS_ID")
 	Address address;
 
 	String phoneNumber;
@@ -52,7 +56,7 @@ public class Cabin extends AbstractEntity {
 	List<Bedroom> bedrooms;
 
 	public Cabin() {
-		address = new Address();
+//		address = new Address();
 //		rentalTerms = new RentalTerms();
 //		reviews = new ArrayList<Review>();
 	}

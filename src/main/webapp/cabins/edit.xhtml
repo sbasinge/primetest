@@ -7,15 +7,12 @@
 
 
 	<ui:define name="content">
-		<h:outputLabel value="City" for="city" />
-		<h:inputText id="city" value="#{cabinSearchBean.selectedCabin.address.city}" />
+		<p:messages id="msgs" showDetail="true"/> 
+		<h:outputLabel value="Name" for="name" />
+		<h:inputText id="name" value="#{cabinSearchBean.selectedCabin.name}" />
 		<p:spacer height="10px" width="100%"/>
-		<h:outputLabel value="State" for="state" />
-		<h:selectOneMenu id="state" value="#{cabinSearchBean.selectedCabin.address.state}" converter="StateEnumConverter">
-			<f:selectItems value="#{factories.states}" var="aState" itemLabel="#{aState.name}" />
-		</h:selectOneMenu>
 		<p:spacer height="10px" width="100%"/>
-		<p:commandButton id="saveButton" action="#{testDataGenerator.loadTestData}" value="Save">
+		<p:commandButton id="saveButton" action="#{cabinSearchBean.saveUpdates}" value="Save" update="msgs" >
 			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
 		</p:commandButton>
 		<p:spacer height="10px" width="100%"/>

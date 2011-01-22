@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -23,7 +25,8 @@ import com.examples.cabin.entity.RentalTerms;
 import com.examples.cabin.entity.Review;
 
 @Named
-public class TestDataGenerator {
+@ConversationScoped
+public class TestDataGenerator extends AbstractPageBean {
 	Logger log = LoggerFactory.getLogger(TestDataGenerator.class);
 
 	@PersistenceContext
@@ -31,6 +34,9 @@ public class TestDataGenerator {
 
 	@Inject
 	UserTransaction userTransaction;
+
+	@Inject
+	Conversation conversation;
 
 	private List<String> rawTestData;
 	private List<Cabin> testData = new ArrayList<Cabin>();
@@ -67,6 +73,9 @@ public class TestDataGenerator {
 		for (Cabin cabin : testData) {
 			loadCabin(cabin);
 		}
+		log.info("Success");
+		addError("msgs", "Ok", "Test Data Added.");
+
 	}
 
 	private void deleteExistingCabins() {
@@ -102,9 +111,9 @@ public class TestDataGenerator {
 	private void loadCabin(Cabin cabin) {
 		try {
 			userTransaction.begin();
-			db.joinTransaction();
+//			db.joinTransaction();
 			db.persist(cabin);
-			db.flush();
+//			db.flush();
 			userTransaction.commit();
 		} catch (Exception e) {
 			log.error("Error loading cabin",e);

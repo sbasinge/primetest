@@ -9,8 +9,10 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -23,24 +25,30 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.eclipse.persistence.queries.ReadAllQuery;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.event.map.OverlaySelectEvent;  
-import org.primefaces.model.map.DefaultMapModel;  
-import org.primefaces.model.map.LatLng;  
-import org.primefaces.model.map.MapModel;  
-import org.primefaces.model.map.Marker;  
+import org.primefaces.event.map.OverlaySelectEvent;
+import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Cabin;
 
 //@SessionScoped
 @ConversationScoped
 @Named
-public class CabinSearchBean implements Serializable {
+public class CabinSearchBean extends AbstractPageBean {
 	Logger log = LoggerFactory.getLogger(CabinSearchBean.class);
 
 	@PersistenceContext
@@ -49,19 +57,20 @@ public class CabinSearchBean implements Serializable {
 	@Inject
 	UserTransaction userTransaction;
 
-	@Inject Conversation conversation;
-	
+	@Inject
+	Conversation conversation;
+
 	private Cabin cabin;
 	private List<Cabin> cabins = new ArrayList<Cabin>();
-    private MapModel mapModel; 
-    private LatLng mapCenter;
-    private State state;
-    private Cabin selectedCabin;
-    
+	private MapModel mapModel;
+	private LatLng mapCenter;
+	private State state;
+	private Cabin selectedCabin;
+
 	private Marker marker;
-    private java.lang.Double defaultRating = 2.5;
-    private java.lang.Double maxStars = 5d;
-    
+	private java.lang.Double defaultRating = 2.5;
+	private java.lang.Double maxStars = 5d;
+
 	public java.lang.Double getMaxStars() {
 		return maxStars;
 	}
@@ -73,8 +82,9 @@ public class CabinSearchBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		cabin = new Cabin();
+		cabin.setAddress(new Address());
 		mapModel = new DefaultMapModel();
-		mapCenter = new LatLng(40,-82);
+		mapCenter = new LatLng(40, -82);
 		log.debug("Creating cabin: {}", cabin);
 		conversation.begin();
 		log.info("Conversation begin {}", conversation.getId());
@@ -85,17 +95,18 @@ public class CabinSearchBean implements Serializable {
 		log.info("Conversation end {}", conversation.getId());
 		conversation.end();
 	}
-	
+
 	public void search() {
 		log.warn("Searching cabins for {}", cabin);
 		@SuppressWarnings("unchecked")
-		List<Cabin> results = db.createNamedQuery("findMatchingCabins").setParameter("state", getCabin().getAddress().getState()).getResultList();
-		log.info("Results: {}",results.size());
-		
+		List<Cabin> results = db.createNamedQuery("findMatchingCabins")
+				.setParameter("state", getCabin().getAddress().getState())
+				.getResultList();
+		log.info("Results: {}", results.size());
+
 		setCabins(results);
 		updateMapModel();
 	}
-
 
 	public void setCabin(Cabin cabin) {
 		this.cabin = cabin;
@@ -124,14 +135,19 @@ public class CabinSearchBean implements Serializable {
 	public MapModel getMapModel() {
 		return mapModel;
 	}
-	
+
 	private void updateMapModel() {
-		for (Cabin cabin: getCabins()) {
-			log.debug("Processing cabin {}",cabin);
-			if (cabin.getAddress()!=null && cabin.getAddress()!=null && cabin.getAddress().getLocation() != null && cabin.getAddress().getLocation().getLatLng()!=null) {
-				mapModel.addOverlay(new Marker(cabin.getAddress().getLocation().getLatLng(), cabin.getName(), cabin.getAverageRating(), "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"));
-//				mapModel.addOverlay(new Marker(coord1));
-				setMapCenter(cabin.getAddress().getLocation().getLatLng());
+		for (Cabin cabin : getCabins()) {
+			log.debug("Processing cabin {}", cabin);
+			if (cabin.getAddress() != null && cabin.getAddress() != null
+					&& cabin.getAddress().getGeoLocation() != null
+					&& cabin.getAddress().getGeoLocation().getLatLng() != null) {
+				mapModel.addOverlay(new Marker(cabin.getAddress().getGeoLocation()
+						.getLatLng(), cabin.getName(),
+						cabin.getAverageRating(),
+						"http://maps.google.com/mapfiles/ms/micons/blue-dot.png"));
+				// mapModel.addOverlay(new Marker(coord1));
+				setMapCenter(cabin.getAddress().getGeoLocation().getLatLng());
 			}
 		}
 
@@ -152,15 +168,16 @@ public class CabinSearchBean implements Serializable {
 	public State getState() {
 		return state;
 	}
-	
-    public void onMarkerSelect(OverlaySelectEvent event) {  
-    	marker = (Marker) event.getOverlay();
-    	log.info("Marker selected for {}",marker.getLatlng());
-    }  
-      
-    public Marker getMarker() {  
-        return marker;  
-    }
+
+	public void onMarkerSelect(OverlaySelectEvent event) {
+		marker = (Marker) event.getOverlay();
+		log.info("Marker selected for {}", marker.getLatlng());
+		addInfo("msgs","select","marker selected.");
+	}
+
+	public Marker getMarker() {
+		return marker;
+	}
 
 	public void setDefaultRating(java.lang.Double defaultRating) {
 		this.defaultRating = defaultRating;
@@ -172,26 +189,45 @@ public class CabinSearchBean implements Serializable {
 
 	public void setSelectedCabin(Cabin selectedCabin) {
 		this.selectedCabin = selectedCabin;
-		log.info("Cabin selected {}",selectedCabin);
+		log.info("Cabin selected {}", selectedCabin);
+		addInfo("msgs","select","cabin selected.");
 	}
 
 	public Cabin getSelectedCabin() {
 		return selectedCabin;
-	}  
-	
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Cabin> getAllCabins() {
 		return db.createNamedQuery("findAllCabins").getResultList();
 	}
+
+	public String onRowSelectNavigate(SelectEvent event) {
+//		FacesContext.getCurrentInstance().getExternalContext().getFlash()
+//				.put("selectedCabin", event.getObject());
+		setSelectedCabin((Cabin) event.getObject());
+		log.info("redirecting");
+		return "edit.jsf?faces-redirect=true";
+	}
+
+	public String saveUpdates() {
+		boolean success = true;
+		log.info("Saving cabin {}",selectedCabin);
+		String retVal = "list.jsf?faces-redirect=true";
+		try {
+			userTransaction.begin();
+			db.merge(selectedCabin);
+			db.flush();
+			userTransaction.commit();
+		} catch (Exception e) {
+			retVal = null;
+			success = false;
+			addError("msgs","Error saving", e.getMessage());
+		}
+		if (success) {
+			addInfo("msgs","Added","cabnin added..");
+		}
+		return retVal;
+	}
 	
-    public String onRowSelectNavigate(SelectEvent event) {  
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedCabin", event.getObject());  
-        log.info("redirecting");
-        return "edit.jsf?faces-redirect=true";  
-    }  
-    
-    public String saveUpdates() {
-    	db.persist(selectedCabin);
-        return "list.jsf?faces-redirect=true";  
-    }
 }

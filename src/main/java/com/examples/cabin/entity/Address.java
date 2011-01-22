@@ -3,11 +3,16 @@ package com.examples.cabin.entity;
 import java.util.Calendar;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -17,9 +22,9 @@ import com.examples.cabin.State;
 
 @Entity
 public class Address extends AbstractEntity {
-	@Id
-	@GeneratedValue
-	int id;
+//	@Id
+//	@GeneratedValue(strategy=GenerationType.IDENTITY)
+//	int id;
 
 	String addressLine1;
 	String addressLine2;
@@ -31,8 +36,8 @@ public class Address extends AbstractEntity {
 	
 	String zip;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	GeoLocation location;
+	@Embedded
+	GeoLocation geoLocation;
 
 	public Address() {
 	}
@@ -47,27 +52,27 @@ public class Address extends AbstractEntity {
 		this.addressLine1 = addressLine1;
 		this.city = city;
 		this.state = state;
-		this.location = new GeoLocation();
-		this.location.latLng = new LatLng(lat, lng);
-		this.location.lastGeoLookup = Calendar.getInstance().getTime();
+		this.geoLocation = new GeoLocation();
+		this.geoLocation.latLng = new LatLng(lat, lng);
+		this.geoLocation.lastGeoLookup = Calendar.getInstance().getTime();
 	}
 
 	public Address(String addressLine1, String city, State state, LatLng latLng) {
 		this.addressLine1 = addressLine1;
 		this.city = city;
 		this.state = state;
-		this.location = new GeoLocation();
-		this.location.latLng = latLng;
-		this.location.lastGeoLookup = Calendar.getInstance().getTime();
+		this.geoLocation = new GeoLocation();
+		this.geoLocation.latLng = latLng;
+		this.geoLocation.lastGeoLookup = Calendar.getInstance().getTime();
 	}
 
 	public Address(String addressLine1, String city, State state, String zip, LatLng latLng) {
 		this.addressLine1 = addressLine1;
 		this.city = city;
 		this.state = state;
-		this.location = new GeoLocation();
-		this.location.latLng = latLng;
-		this.location.lastGeoLookup = Calendar.getInstance().getTime();
+		this.geoLocation = new GeoLocation();
+		this.geoLocation.latLng = latLng;
+		this.geoLocation.lastGeoLookup = Calendar.getInstance().getTime();
 		this.zip = zip;
 	}
 
@@ -122,12 +127,12 @@ public class Address extends AbstractEntity {
 				.toString();
 	}
 
-	public GeoLocation getLocation() {
-		return location;
+	public GeoLocation getGeoLocation() {
+		return geoLocation;
 	}
 
-	public void setLocation(GeoLocation location) {
-		this.location = location;
+	public void setGeoLocation(GeoLocation location) {
+		this.geoLocation = location;
 	}
 
 	public String getZip() {

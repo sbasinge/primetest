@@ -5,15 +5,16 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 public class Review extends AbstractEntity {
-	@Id
-	@GeneratedValue
-	int id;
+//	@Id
+//	@GeneratedValue(strategy=GenerationType.IDENTITY)
+//	int id;
 
 	public Review() {
 		this.reviewDate = Calendar.getInstance().getTime();

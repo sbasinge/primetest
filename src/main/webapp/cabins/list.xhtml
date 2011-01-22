@@ -10,8 +10,16 @@
 			<p:dataTable id="cabinTable" value="#{cabinSearchBean.allCabins}" var="_cabin" paginator="true" selection="#{cabinSearchBean.selectedCabin}" selectionMode="single"  
                  rowSelectListener="#{cabinSearchBean.onRowSelectNavigate}" dblClickSelect="true">
 				<p:column>
+					<f:facet name="header">ID</f:facet>
+					<h:outputText value="#{_cabin.id}" />
+				</p:column>
+				<p:column>
 					<f:facet name="header">Name</f:facet>
 					<h:outputText value="#{_cabin.name}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Address ID</f:facet>
+					<h:outputText value="#{_cabin.address.id}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">City</f:facet>
