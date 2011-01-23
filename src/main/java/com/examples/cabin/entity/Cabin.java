@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 	@NamedQuery(name = "findAllCabins", query = "select c from Cabin c")
 })
 public class Cabin extends AbstractEntity {
+	@Transient
 	Logger log = LoggerFactory.getLogger(Cabin.class);
 
 //	@Id
@@ -36,9 +38,9 @@ public class Cabin extends AbstractEntity {
 	String name;
 	String url;
 	String imageUrl;
-	Integer numFireplaces;
 	boolean hotTub;
 	boolean firePit;
+	boolean firePlace;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="ADDRESS_ID")
@@ -170,14 +172,6 @@ public class Cabin extends AbstractEntity {
 		this.imageUrl = imageUrl;
 	}
 
-	public Integer getNumFireplaces() {
-		return numFireplaces;
-	}
-
-	public void setNumFireplaces(Integer numFireplaces) {
-		this.numFireplaces = numFireplaces;
-	}
-
 	public boolean isHotTub() {
 		return hotTub;
 	}
@@ -200,5 +194,13 @@ public class Cabin extends AbstractEntity {
 
 	public void setBedrooms(List<Bedroom> bedrooms) {
 		this.bedrooms = bedrooms;
+	}
+
+	public boolean isFirePlace() {
+		return firePlace;
+	}
+
+	public void setFirePlace(boolean firePlace) {
+		this.firePlace = firePlace;
 	}
 }

@@ -19,6 +19,25 @@
 			<f:selectItems value="#{factories.states}" var="aState" itemLabel="#{aState.name}" />
 		</h:selectOneMenu>
 		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="Zip" for="zipCode" />
+		<h:inputText id="zipCode" value="#{cabinSearchBean.cabin.address.zipCode}" />
+		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="WebSite" for="url" />
+		<h:inputText id="url" value="#{cabinSearchBean.cabin.url}" />
+		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="Image" for="imageUrl" />
+		<h:inputText id="imageUrl" value="#{cabinSearchBean.cabin.imageUrl}" />
+		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="# Fireplaces" for="firePlace" />
+		<h:selectBooleanCheckbox id="firePlace" value="#{cabinSearchBean.cabin.firePlace}" />
+		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="Hot Tub?" for="hotTub" />
+		<h:selectBooleanCheckbox id="hotTub" value="#{cabinSearchBean.cabin.hotTub}" />
+		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="Fire Pit?" for="firePit" />
+		<h:selectBooleanCheckbox id="firePit" value="#{cabinSearchBean.cabin.firePit}" />
+		<p:spacer height="10px" width="100%"/>
+		
 		<p:commandButton id="searchButton" action="#{cabinSearchBean.search}" value="Search" update="cabinList, mapPanel">
 			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
 		</p:commandButton>

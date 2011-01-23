@@ -21,6 +21,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PostRemove;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -32,7 +33,10 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
+import org.eclipse.persistence.jpa.JpaHelper;
+import org.eclipse.persistence.queries.QueryByExamplePolicy;
 import org.eclipse.persistence.queries.ReadAllQuery;
+import org.eclipse.persistence.queries.ReadObjectQuery;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
@@ -98,12 +102,13 @@ public class CabinSearchBean extends AbstractPageBean {
 
 	public void search() {
 		log.warn("Searching cabins for {}", cabin);
-		@SuppressWarnings("unchecked")
-		List<Cabin> results = db.createNamedQuery("findMatchingCabins")
-				.setParameter("state", getCabin().getAddress().getState())
-				.getResultList();
-		log.info("Results: {}", results.size());
+//		@SuppressWarnings("unchecked")
+//		List<Cabin> results = db.createNamedQuery("findMatchingCabins")
+//				.setParameter("state", getCabin().getAddress().getState())
+//				.getResultList();
 
+		List<Cabin> results = queryByExample();
+		log.info("Results: {}", results.size());
 		setCabins(results);
 		updateMapModel();
 	}
@@ -258,6 +263,25 @@ public class CabinSearchBean extends AbstractPageBean {
 		String retVal = "list.jsf?faces-redirect=true";
 		db.clear();
 		conversation.end();
+		return retVal;
+	}
+	
+	/**
+	 * From stackoverflow
+	 * http://stackoverflow.com/questions/2880209/jpa-findbyexample
+	 * 
+	 * @return
+	 */
+	public List<Cabin> queryByExample() {
+		List<Cabin> retVal = null;
+		// Create a native EclipseLink query using QBE policy
+		QueryByExamplePolicy policy = new QueryByExamplePolicy();
+		policy.excludeDefaultPrimitiveValues();
+		ReadObjectQuery q = new ReadObjectQuery(cabin, policy);
+
+		// Wrap the native query in a standard JPA Query and execute it 
+		Query query = JpaHelper.createQuery(q, db); 
+		retVal =  query.getResultList();
 		return retVal;
 	}
 }

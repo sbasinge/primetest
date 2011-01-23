@@ -25,8 +25,8 @@
 			<h:inputText id="url" value="#{cabinSearchBean.selectedCabin.url}" />
 			<h:outputLabel value="Image" for="imageUrl" />
 			<h:inputText id="imageUrl" value="#{cabinSearchBean.selectedCabin.imageUrl}" />
-			<h:outputLabel value="# Fireplaces" for="numFireplaces" />
-			<h:inputText id="numFireplaces" value="#{cabinSearchBean.selectedCabin.numFireplaces}" />
+			<h:outputLabel value="# Fireplaces" for="firePlace" />
+			<h:selectBooleanCheckbox id="firePlace" value="#{cabinSearchBean.selectedCabin.firePlace}" />
 			<h:outputLabel value="Hot Tub?" for="hotTub" />
 			<h:selectBooleanCheckbox id="hotTub" value="#{cabinSearchBean.selectedCabin.hotTub}" />
 			<h:outputLabel value="Fire Pit?" for="firePit" />
