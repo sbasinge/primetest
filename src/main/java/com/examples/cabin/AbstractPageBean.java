@@ -16,7 +16,7 @@ public class AbstractPageBean implements Serializable {
     }  
 
     public void addInfo(String clientId, String summary, String msg) {  
-        FacesContext.getCurrentInstance().addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_INFO,summary, msg));  
+    	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,summary, msg));  
     }  
 
 }

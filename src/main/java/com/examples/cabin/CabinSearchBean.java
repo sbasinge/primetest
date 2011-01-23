@@ -229,5 +229,35 @@ public class CabinSearchBean extends AbstractPageBean {
 		}
 		return retVal;
 	}
-	
+
+	public String deleteSelectedCabin() {
+		boolean success = true;
+		log.info("Deleting cabin {}",selectedCabin);
+		String retVal = "list.jsf?faces-redirect=true";
+		try {
+			userTransaction.begin();
+			Cabin temp = db.find(Cabin.class, selectedCabin.getId());
+			db.remove(temp);
+			userTransaction.commit();
+		} catch (Exception e) {
+			retVal = null;
+			success = false;
+			addError("msgs","Error deleting", e.getMessage());
+		}
+		if (success) {
+			addInfo("msgs","Removed","cabnin removed..");
+		}
+		return retVal;
+	}
+
+	/**
+	 * Discard changes, end conversation and return to list page.
+	 * @return
+	 */
+	public String cancelEdit() {
+		String retVal = "list.jsf?faces-redirect=true";
+		db.clear();
+		conversation.end();
+		return retVal;
+	}
 }

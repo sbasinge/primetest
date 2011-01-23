@@ -5,16 +5,91 @@
 	xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:p="http://primefaces.prime.com.tr/ui" template="/layouts/template.xhtml">
 
-
 	<ui:define name="content">
-		<p:messages id="msgs" showDetail="true"/> 
-		<h:outputLabel value="Name" for="name" />
-		<h:inputText id="name" value="#{cabinSearchBean.selectedCabin.name}" />
-		<p:spacer height="10px" width="100%"/>
-		<p:spacer height="10px" width="100%"/>
-		<p:commandButton id="saveButton" action="#{cabinSearchBean.saveUpdates}" value="Save" update="msgs" >
+		<h:panelGrid columns="6">
+			<h:outputLabel value="Name" for="name" />
+			<h:inputText id="name" value="#{cabinSearchBean.selectedCabin.name}" />
+			<h:outputLabel value="Address" for="addressLine1" />
+			<h:inputText id="addressLine1" value="#{cabinSearchBean.selectedCabin.address.addressLine1}" />
+			<h:outputLabel value="Address 2" for="addressLine2" />
+			<h:inputText id="addressLine2" value="#{cabinSearchBean.selectedCabin.address.addressLine2}" />
+			<h:outputLabel value="City" for="city" />
+			<h:inputText id="city" value="#{cabinSearchBean.selectedCabin.address.city}" />
+			<h:outputLabel value="State" for="state" />
+			<h:selectOneMenu id="state" value="#{cabinSearchBean.selectedCabin.address.state}" converter="StateEnumConverter">
+				<f:selectItems value="#{factories.states}" var="aState" itemLabel="#{aState.name}" />
+			</h:selectOneMenu>
+			<h:outputLabel value="Zip" for="zipCode" />
+			<h:inputText id="zipCode" value="#{cabinSearchBean.selectedCabin.address.zipCode}" />
+			<h:outputLabel value="WebSite" for="url" />
+			<h:inputText id="url" value="#{cabinSearchBean.selectedCabin.url}" />
+			<h:outputLabel value="Image" for="imageUrl" />
+			<h:inputText id="imageUrl" value="#{cabinSearchBean.selectedCabin.imageUrl}" />
+			<h:outputLabel value="# Fireplaces" for="numFireplaces" />
+			<h:inputText id="numFireplaces" value="#{cabinSearchBean.selectedCabin.numFireplaces}" />
+			<h:outputLabel value="Hot Tub?" for="hotTub" />
+			<h:selectBooleanCheckbox id="hotTub" value="#{cabinSearchBean.selectedCabin.hotTub}" />
+			<h:outputLabel value="Fire Pit?" for="firePit" />
+			<h:selectBooleanCheckbox id="firePit" value="#{cabinSearchBean.selectedCabin.firePit}" />
+		</h:panelGrid>
+		<p:accordionPanel autoHeight="false">
+			<p:tab title="rentalTerms">
+				<p:dataTable id="rentalTermsTable" value="#{cabinSearchBean.selectedCabin.rentalTerms}" var="_rentalTerm" paginator="true" selectionMode="single" dblClickSelect="true">
+					<p:column>
+						<f:facet name="header">ID</f:facet>
+						<h:outputText value="#{_rentalTerm.id}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Max Occupants</f:facet>
+						<h:outputText value="#{_rentalTerm.maxOccupants}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Nightly Rate</f:facet>
+						<h:outputText value="#{_rentalTerm.nightlyRental}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Based On</f:facet>
+						<h:outputText value="#{_rentalTerm.basedOn}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Add'l Person Rate</f:facet>
+						<h:outputText value="#{_rentalTerm.additionalPerPerson}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Weekly Rental</f:facet>
+						<h:outputText value="#{_rentalTerm.weeklyRental}" />
+					</p:column>
+				</p:dataTable>
+			</p:tab>
+			<p:tab title="Reviews">
+				<p:dataTable id="reviewsTable" value="#{cabinSearchBean.selectedCabin.reviews}" var="_review" paginator="true" selectionMode="single" dblClickSelect="true">
+					<p:column>
+						<f:facet name="header">ID</f:facet>
+						<h:outputText value="#{_review.id}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Date</f:facet>
+						<h:outputText value="#{_review.reviewDate}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Comments</f:facet>
+						<h:outputText value="#{_review.comments}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Rating</f:facet>
+						<h:outputText value="#{_review.rating}" />
+					</p:column>
+				</p:dataTable>
+			</p:tab>
+		</p:accordionPanel>
+		<p:commandButton id="saveButton" action="#{cabinSearchBean.saveUpdates}" value="Save" update="msgs">
 			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
 		</p:commandButton>
-		<p:spacer height="10px" width="100%"/>
+		<p:commandButton id="deleteButton" action="#{cabinSearchBean.deleteSelectedCabin}" value="Delete" update="msgs">
+			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+		</p:commandButton>
+		<p:commandButton id="cancelButton" action="#{cabinSearchBean.cancelEdit}" value="Cancel" update="msgs">
+			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+		</p:commandButton>
 	</ui:define>
 </ui:composition>

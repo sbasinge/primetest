@@ -30,6 +30,10 @@
 					<h:outputText value="#{_cabin.address.state.name}" />
 				</p:column>
 				<p:column>
+					<f:facet name="header">Zip</f:facet>
+					<h:outputText value="#{_cabin.address.zipCode}" />
+				</p:column>
+				<p:column>
 					<f:facet name="header">Nightly Rate</f:facet>
 					<h:outputText value="#{_cabin.rentalTerms.nightlyRental}">
 						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" type="currency" />

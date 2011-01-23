@@ -34,46 +34,20 @@ public class Address extends AbstractEntity {
 	@Enumerated(EnumType.STRING)
 	State state;
 	
-	String zip;
-	
 	@Embedded
 	GeoLocation geoLocation;
 
 	public Address() {
 	}
 
-	public Address(String addressLine1, String city, State state) {
-		this.addressLine1 = addressLine1;
-		this.city = city;
-		this.state = state;
-	}
-
-	public Address(String addressLine1, String city, State state, String zipCode, double lat, double lng) {
+	public Address(String addressLine1, String city, State state, String zip, double lat, double lng) {
 		this.addressLine1 = addressLine1;
 		this.city = city;
 		this.state = state;
 		this.geoLocation = new GeoLocation();
 		this.geoLocation.latLng = new LatLng(lat, lng);
 		this.geoLocation.lastGeoLookup = Calendar.getInstance().getTime();
-	}
-
-	public Address(String addressLine1, String city, State state, LatLng latLng) {
-		this.addressLine1 = addressLine1;
-		this.city = city;
-		this.state = state;
-		this.geoLocation = new GeoLocation();
-		this.geoLocation.latLng = latLng;
-		this.geoLocation.lastGeoLookup = Calendar.getInstance().getTime();
-	}
-
-	public Address(String addressLine1, String city, State state, String zip, LatLng latLng) {
-		this.addressLine1 = addressLine1;
-		this.city = city;
-		this.state = state;
-		this.geoLocation = new GeoLocation();
-		this.geoLocation.latLng = latLng;
-		this.geoLocation.lastGeoLookup = Calendar.getInstance().getTime();
-		this.zip = zip;
+		this.zipCode = zip;
 	}
 
 	public int getId() {
@@ -124,6 +98,7 @@ public class Address extends AbstractEntity {
 				.append("addressLine2", this.getAddressLine2())
 				.append("city", this.getCity())
 				.append("state", this.getState())
+				.append("zip", this.getZipCode())
 				.toString();
 	}
 
@@ -133,14 +108,6 @@ public class Address extends AbstractEntity {
 
 	public void setGeoLocation(GeoLocation location) {
 		this.geoLocation = location;
-	}
-
-	public String getZip() {
-		return zip;
-	}
-
-	public void setZip(String zip) {
-		this.zip = zip;
 	}
 
 	public String getZipCode() {
