@@ -51,6 +51,7 @@ import org.slf4j.LoggerFactory;
 
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Cabin;
+import com.examples.cabin.entity.Cabin_;
 
 //@SessionScoped
 @ConversationScoped
@@ -90,8 +91,6 @@ public class CabinSearchBean extends AbstractPageBean {
 	public void init() {
 		cabin = new Cabin();
 		cabin.setAddress(new Address());
-		mapModel = new DefaultMapModel();
-		mapCenter = new LatLng(40, -82);
 		log.debug("Creating cabin: {}", cabin);
 		conversation.begin();
 		log.info("Conversation begin {}", conversation.getId());
@@ -147,6 +146,9 @@ public class CabinSearchBean extends AbstractPageBean {
 	}
 
 	private void updateMapModel() {
+		mapModel = new DefaultMapModel();
+		mapCenter = new LatLng(40, -82);
+
 		for (Cabin cabin : getCabins()) {
 			log.debug("Processing cabin {}", cabin);
 			if (cabin.getAddress() != null && cabin.getAddress() != null
@@ -294,21 +296,22 @@ public class CabinSearchBean extends AbstractPageBean {
 		List<Cabin> retVal = null;
 		CriteriaBuilder builder = db.getCriteriaBuilder();
 		CriteriaQuery<Cabin> query = builder.createQuery(Cabin.class);
-		EntityType<Cabin> type = db.getMetamodel().entity(Cabin.class);
 		Root<Cabin> root = query.from(Cabin.class);
-		
+
 		if(cabin.getAddress().getState()!=null) {
 //join the address and get it's state attribute?			
 		}
+		Predicate temp = null;
 		if (cabin.isFirePit()) {
-			query.where(builder.equal(root.get(type.getDeclaredSingularAttribute("firePit")),true));
+			temp = builder.and(builder.isTrue(root.get(Cabin_.firePit)));
 		}
 		if (cabin.isFirePlace()) {
-			query.where(builder.equal(root.get(type.getDeclaredSingularAttribute("firePlace")),true));
+			temp = builder.and(builder.isTrue(root.get(Cabin_.firePlace)));
 		}
 		if (cabin.isHotTub()) {
-			query.where(builder.equal(root.get(type.getDeclaredSingularAttribute("hotTub")),true));
+			temp = builder.and(builder.isTrue(root.get(Cabin_.hotTub)));
 		}
+		query.where(temp);
 		
 		retVal = db.createQuery(query).getResultList();		
 		return retVal;

@@ -2,6 +2,7 @@
 <!DOCTYPE resources PUBLIC "-//Sun Microsystems, Inc.//DTD Application Server 9.0 Resource Definitions //EN"
    "http://www.sun.com/software/appserver/dtds/sun-resources_1_4.dtd">
 <resources>
+<!-- 
    <jdbc-resource pool-name="MySQLPool"
       jndi-name="jdbc/primetest"/>
    <jdbc-connection-pool name="MySQLPool"
@@ -14,4 +15,16 @@
       <property name="Password " value="root"/>
       <property name="CreateDatabaseIfNotExist" value="true"/>
    </jdbc-connection-pool>
+ -->
+    
+   <jdbc-resource pool-name="EmbeddedDerbyPool"
+      jndi-name="jdbc/primetest"/>
+   <jdbc-connection-pool name="EmbeddedDerbyPool"
+      res-type="javax.sql.DataSource"
+      datasource-classname="org.apache.derby.jdbc.EmbeddedDataSource"
+      is-isolation-level-guaranteed="false">
+      <property name="databaseName" value="/tmp/databases/derby"/>
+      <property name="createDatabase" value="create"/>
+   </jdbc-connection-pool>
+
 </resources>

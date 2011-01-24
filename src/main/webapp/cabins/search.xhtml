@@ -28,7 +28,7 @@
 		<h:outputLabel value="Image" for="imageUrl" />
 		<h:inputText id="imageUrl" value="#{cabinSearchBean.cabin.imageUrl}" />
 		<p:spacer height="10px" width="100%"/>
-		<h:outputLabel value="# Fireplaces" for="firePlace" />
+		<h:outputLabel value="Fireplace?" for="firePlace" />
 		<h:selectBooleanCheckbox id="firePlace" value="#{cabinSearchBean.cabin.firePlace}" />
 		<p:spacer height="10px" width="100%"/>
 		<h:outputLabel value="Hot Tub?" for="hotTub" />
@@ -47,26 +47,6 @@
 				<p:column>
 					<f:facet name="header">Name</f:facet>
 					<h:outputText value="#{_cabin.name}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">City</f:facet>
-					<h:outputText value="#{_cabin.address.city}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">State</f:facet>
-					<h:outputText value="#{_cabin.address.state.name}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">Nightly Rate</f:facet>
-					<h:outputText value="#{_cabin.rentalTerms.nightlyRental}">
-						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" type="currency" />
-					</h:outputText>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Rating</f:facet>
-					<h:outputText value="#{_cabin.averageRating}">
-						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
-					</h:outputText>
 				</p:column>
 			</p:dataTable>
 		</p:outputPanel>

@@ -43,9 +43,17 @@ public class TestDataGenerator extends AbstractPageBean {
 	
 	@PostConstruct
 	private void setupTestData() {
-		testData.add(new Cabin("Hemlock", new Address(null, "Hocking Hills", State.OH,"43152",39.464,-82.545) ,new RentalTerms(new Integer(12), new BigDecimal(279), new BigDecimal(15), new Integer(8), null),new Review("stayed in 2009",4)));
-		testData.add(new Cabin("Ash Cave Cabins", new Address("25780 Liberty Hill Rd.", "So. Bloomingville", State.OH,"43152",39.398,-82.536),new RentalTerms(new Integer(10), new BigDecimal(100), new BigDecimal(10), new Integer(4), null),new Review("sample",2)));
-		testData.add(new Cabin("Heritage Lodge", new Address("Buena Vista", "Hocking Hills", State.OH,"43152",39.566,-82.593),new RentalTerms(new Integer(10), new BigDecimal(100), new BigDecimal(10), new Integer(4), null),new Review("sample",2)));
+		Cabin cabin1 = new Cabin("Hemlock", new Address(null, "Hocking Hills", State.OH,"43152",39.464,-82.545) ,new RentalTerms(new Integer(12), new BigDecimal(279), new BigDecimal(15), new Integer(8), null),new Review("stayed in 2009",4));
+		cabin1.setFirePit(true);
+		cabin1.setHotTub(true);
+		cabin1.setFirePlace(true);
+		testData.add(cabin1);
+		Cabin cabin2 = new Cabin("Ash Cave Cabins", new Address("25780 Liberty Hill Rd.", "So. Bloomingville", State.OH,"43152",39.398,-82.536),new RentalTerms(new Integer(10), new BigDecimal(100), new BigDecimal(10), new Integer(4), null),new Review("sample",2));
+		cabin2.setHotTub(true);
+		testData.add(cabin2);
+		Cabin cabin3 = new Cabin("Heritage Lodge", new Address("Buena Vista", "Hocking Hills", State.OH,"43152",39.566,-82.593),new RentalTerms(new Integer(10), new BigDecimal(100), new BigDecimal(10), new Integer(4), null),new Review("sample",2));
+		cabin3.setFirePit(true);
+		testData.add(cabin3);
 //		testData.add(new Cabin("Cedar Hill Lodge", new Address("123 Main St", "New Lexington", State.OH,new LatLng(40,-82)),new RentalTerms(new Integer(10), new BigDecimal(100), new BigDecimal(10), new Integer(4), null),new Review("sample",2)));
 //		testData.add(new Cabin("Heritage Retreat", new Address("123 Main St", "New Lexington", State.OH,new LatLng(40,-82)),new RentalTerms(new Integer(10), new BigDecimal(100), new BigDecimal(10), new Integer(4), null),new Review("sample",2)));
 //		testData.add(new Cabin("Timber Creek", new Address("123 Main St", "New Lexington", State.OH,new LatLng(40,-82)),new RentalTerms(new Integer(10), new BigDecimal(100), new BigDecimal(10), new Integer(4), null),new Review("sample",2)));
