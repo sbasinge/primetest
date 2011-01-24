@@ -25,7 +25,10 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -102,12 +105,14 @@ public class CabinSearchBean extends AbstractPageBean {
 
 	public void search() {
 		log.warn("Searching cabins for {}", cabin);
+		List<Cabin> results = null;
 //		@SuppressWarnings("unchecked")
 //		List<Cabin> results = db.createNamedQuery("findMatchingCabins")
 //				.setParameter("state", getCabin().getAddress().getState())
 //				.getResultList();
 
-		List<Cabin> results = queryByExample();
+//		results = queryByExample();
+		results = buildAndRunQuery();
 		log.info("Results: {}", results.size());
 		setCabins(results);
 		updateMapModel();
@@ -272,7 +277,7 @@ public class CabinSearchBean extends AbstractPageBean {
 	 * 
 	 * @return
 	 */
-	public List<Cabin> queryByExample() {
+	private List<Cabin> queryByExample() {
 		List<Cabin> retVal = null;
 		// Create a native EclipseLink query using QBE policy
 		QueryByExamplePolicy policy = new QueryByExamplePolicy();
@@ -282,6 +287,30 @@ public class CabinSearchBean extends AbstractPageBean {
 		// Wrap the native query in a standard JPA Query and execute it 
 		Query query = JpaHelper.createQuery(q, db); 
 		retVal =  query.getResultList();
+		return retVal;
+	}
+	
+	private List<Cabin> buildAndRunQuery() {
+		List<Cabin> retVal = null;
+		CriteriaBuilder builder = db.getCriteriaBuilder();
+		CriteriaQuery<Cabin> query = builder.createQuery(Cabin.class);
+		EntityType<Cabin> type = db.getMetamodel().entity(Cabin.class);
+		Root<Cabin> root = query.from(Cabin.class);
+		
+		if(cabin.getAddress().getState()!=null) {
+//join the address and get it's state attribute?			
+		}
+		if (cabin.isFirePit()) {
+			query.where(builder.equal(root.get(type.getDeclaredSingularAttribute("firePit")),true));
+		}
+		if (cabin.isFirePlace()) {
+			query.where(builder.equal(root.get(type.getDeclaredSingularAttribute("firePlace")),true));
+		}
+		if (cabin.isHotTub()) {
+			query.where(builder.equal(root.get(type.getDeclaredSingularAttribute("hotTub")),true));
+		}
+		
+		retVal = db.createQuery(query).getResultList();		
 		return retVal;
 	}
 }
