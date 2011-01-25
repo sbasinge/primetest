@@ -8,16 +8,16 @@
 	<ui:define name="content">
 		<p:outputPanel id="cabinList">
 			<p:dataTable id="cabinTable" value="#{cabinSearchBean.allCabins}" var="_cabin" paginator="true" selection="#{cabinSearchBean.selectedCabin}" selectionMode="single"  
-                 rowSelectListener="#{cabinSearchBean.onRowSelectNavigate}" dblClickSelect="true">
-				<p:column>
+                 rowSelectListener="#{cabinSearchBean.onRowSelectNavigate}" dblClickSelect="true" dynamic="true">
+				<p:column sortBy="#{_cabin.name}">
 					<f:facet name="header">ID</f:facet>
 					<h:outputText value="#{_cabin.id}" />
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{_cabin.name}">
 					<f:facet name="header">Name</f:facet>
 					<h:outputText value="#{_cabin.name}" />
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{_cabin.address.id}">
 					<f:facet name="header">Address ID</f:facet>
 					<h:outputText value="#{_cabin.address.id}" />
 				</p:column>
