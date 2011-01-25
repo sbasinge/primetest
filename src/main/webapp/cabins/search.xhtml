@@ -22,12 +22,6 @@
 		<h:outputLabel value="Zip" for="zipCode" />
 		<h:inputText id="zipCode" value="#{cabinSearchBean.cabin.address.zipCode}" />
 		<p:spacer height="10px" width="100%"/>
-		<h:outputLabel value="WebSite" for="url" />
-		<h:inputText id="url" value="#{cabinSearchBean.cabin.url}" />
-		<p:spacer height="10px" width="100%"/>
-		<h:outputLabel value="Image" for="imageUrl" />
-		<h:inputText id="imageUrl" value="#{cabinSearchBean.cabin.imageUrl}" />
-		<p:spacer height="10px" width="100%"/>
 		<h:outputLabel value="Fireplace?" for="firePlace" />
 		<h:selectBooleanCheckbox id="firePlace" value="#{cabinSearchBean.cabin.firePlace}" />
 		<p:spacer height="10px" width="100%"/>
@@ -58,7 +52,7 @@
 				style="width:100%;height:740px" model="#{cabinSearchBean.mapModel}"
 				overlaySelectListener="#{cabinSearchBean.onMarkerSelect}" rendered="#{not empty cabinSearchBean.cabins}">
 				<p:gmapInfoWindow id="mapInfo">
-					<p:outputPanel id="mapInfoPanel" style="text-align:center;display:block;margin:auto:">
+					<p:outputPanel id="mapInfoPanel" style="text-align:center;display:block;margin:auto;width:275px;height:75px;">
 						<h:outputText id="markerTitle" value="#{cabinSearchBean.marker.title}" />
 						<br />
 						<h:outputLabel id="ratingLabel" value="Average Rating: " for="test" />
