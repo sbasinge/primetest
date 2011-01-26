@@ -31,7 +31,16 @@
 		<h:outputLabel value="Fire Pit?" for="firePit" />
 		<h:selectBooleanCheckbox id="firePit" value="#{cabinSearchBean.cabin.firePit}" />
 		<p:spacer height="10px" width="100%"/>
-		
+		<h:outputLabel value="Price Low" for="startingRange"/>
+		<h:inputText value="#{cabinSearchBean.startingRange}" id="startingRange" />
+		<p:slider id="priceLow" for="startingRange" maxValue="#{cabinSearchBean.maxPrice-10}" minValue="#{cabinSearchBean.minPrice}"/>
+		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="Price High" for="endingRange"/>
+		<h:inputText value="#{cabinSearchBean.endingRange}" id="endingRange" />
+		<p:slider id="priceHigh" for="endingRange" maxValue="#{cabinSearchBean.maxPrice}" minValue="#{cabinSearchBean.minPrice+10}" />
+
+		<p:spacer height="10px" width="100%"/>
+		<p:spacer height="10px" width="100%"/>
 		<p:commandButton id="searchButton" action="#{cabinSearchBean.search}" value="Search" update="cabinList, mapPanel">
 			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
 		</p:commandButton>

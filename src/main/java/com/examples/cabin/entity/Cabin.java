@@ -203,4 +203,12 @@ public class Cabin extends AbstractEntity {
 	public void setFirePlace(boolean firePlace) {
 		this.firePlace = firePlace;
 	}
+	
+	/**
+	 * Convenience method
+	 * @return
+	 */
+	public double getNightlyRate() {
+		return getRentalTerms() != null ? getRentalTerms().getNightlyRental().doubleValue() : 0;
+	}
 }

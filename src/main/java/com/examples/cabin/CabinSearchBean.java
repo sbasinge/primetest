@@ -1,5 +1,6 @@
 package com.examples.cabin;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import javax.persistence.PostRemove;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -36,6 +38,8 @@ import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Address_;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.Cabin_;
+import com.examples.cabin.entity.RentalTerms;
+import com.examples.cabin.entity.RentalTerms_;
 
 //@SessionScoped
 @ConversationScoped
@@ -62,7 +66,11 @@ public class CabinSearchBean extends AbstractPageBean {
 	private Marker marker;
 	private java.lang.Double defaultRating = 2.5;
 	private java.lang.Double maxStars = 5d;
-
+	private double startingRange;
+	private double endingRange;
+	private double minPrice;
+	private double maxPrice;
+	
 	public java.lang.Double getMaxStars() {
 		return maxStars;
 	}
@@ -79,6 +87,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		conversation.begin();
 		log.info("Conversation begin {}", conversation.getId());
 		populateAllCabins();
+		calculateMinAndMaxPrices();
 	}
 
 	@PostRemove
@@ -90,11 +99,6 @@ public class CabinSearchBean extends AbstractPageBean {
 	public void search() {
 		log.warn("Searching cabins for {}", cabin);
 		List<Cabin> results = null;
-//		@SuppressWarnings("unchecked")
-//		List<Cabin> results = db.createNamedQuery("findMatchingCabins")
-//				.setParameter("state", getCabin().getAddress().getState())
-//				.getResultList();
-
 //		results = queryByExample();
 		results = buildAndRunQuery();
 		log.info("Results: {}", results.size());
@@ -199,6 +203,7 @@ public class CabinSearchBean extends AbstractPageBean {
 	public void populateAllCabins() {
 		log.info("Populating all cabins");
 		cabins = db.createNamedQuery("findAllCabins").getResultList();
+		//calc high and low prices
 	}
 
 	public String onRowSelectNavigate(SelectEvent event) {
@@ -287,7 +292,6 @@ public class CabinSearchBean extends AbstractPageBean {
 
 		Predicate temp = builder.conjunction();;
 		if(cabin.getAddress().getState()!=null) {
-//join the address and get it's state attribute?	
 			Join<Cabin,Address> address = root.join( Cabin_.address );
 			temp = builder.and(temp,builder.equal(address.get(Address_.state),cabin.getAddress().getState()));
 		}
@@ -300,9 +304,61 @@ public class CabinSearchBean extends AbstractPageBean {
 		if (cabin.isHotTub()) {
 			temp = builder.and(temp,builder.isTrue(root.get(Cabin_.hotTub)));
 		}
+		if (startingRange > minPrice || endingRange < maxPrice) {
+			Join<Cabin,RentalTerms> terms = root.join( Cabin_.rentalTerms );
+			Expression<BigDecimal> rate = terms.get(RentalTerms_.nightlyRental);
+			temp = builder.and(temp,builder.between(rate, new BigDecimal(startingRange), new BigDecimal(endingRange)));
+		}
 		query.where(temp);
 		
 		retVal = db.createQuery(query).getResultList();		
 		return retVal;
+	}
+
+	public void setStartingRange(double startingRange) {
+		this.startingRange = startingRange;
+	}
+
+	public double getStartingRange() {
+		return startingRange;
+	}
+
+	public void setEndingRange(double endingRange) {
+		this.endingRange = endingRange;
+	}
+
+	public double getEndingRange() {
+		return endingRange;
+	}
+
+	public void setMinPrice(double minPrice) {
+		this.minPrice = minPrice;
+	}
+
+	public double getMinPrice() {
+		return minPrice;
+	}
+
+	public void setMaxPrice(double maxPrice) {
+		this.maxPrice = maxPrice;
+	}
+
+	public double getMaxPrice() {
+		return maxPrice;
+	}
+
+	private void calculateMinAndMaxPrices() {
+		minPrice = Double.MAX_VALUE;
+		maxPrice = 0;
+		for (Cabin cabin : cabins) {
+			if (cabin.getNightlyRate() < minPrice) {
+				minPrice = cabin.getNightlyRate();
+			}
+			if (cabin.getNightlyRate() > maxPrice) {
+				maxPrice = cabin.getNightlyRate();
+			}
+		}
+		startingRange = minPrice;
+		endingRange = maxPrice;
 	}
 }
