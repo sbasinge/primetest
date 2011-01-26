@@ -1,7 +1,5 @@
 package com.examples.cabin;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,36 +7,21 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PostRemove;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.eclipse.persistence.jpa.JpaHelper;
 import org.eclipse.persistence.queries.QueryByExamplePolicy;
-import org.eclipse.persistence.queries.ReadAllQuery;
 import org.eclipse.persistence.queries.ReadObjectQuery;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.map.OverlaySelectEvent;
@@ -50,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.examples.cabin.entity.Address;
+import com.examples.cabin.entity.Address_;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.Cabin_;
 
@@ -94,6 +78,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		log.debug("Creating cabin: {}", cabin);
 		conversation.begin();
 		log.info("Conversation begin {}", conversation.getId());
+		populateAllCabins();
 	}
 
 	@PostRemove
@@ -130,6 +115,7 @@ public class CabinSearchBean extends AbstractPageBean {
 	}
 
 	public List<Cabin> getCabins() {
+		log.info("GetCabins returning {} cabins.",cabins.size());
 		return cabins;
 	}
 
@@ -210,8 +196,9 @@ public class CabinSearchBean extends AbstractPageBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Cabin> getAllCabins() {
-		return db.createNamedQuery("findAllCabins").getResultList();
+	public void populateAllCabins() {
+		log.info("Populating all cabins");
+		cabins = db.createNamedQuery("findAllCabins").getResultList();
 	}
 
 	public String onRowSelectNavigate(SelectEvent event) {
@@ -298,18 +285,20 @@ public class CabinSearchBean extends AbstractPageBean {
 		CriteriaQuery<Cabin> query = builder.createQuery(Cabin.class);
 		Root<Cabin> root = query.from(Cabin.class);
 
+		Predicate temp = builder.conjunction();;
 		if(cabin.getAddress().getState()!=null) {
-//join the address and get it's state attribute?			
+//join the address and get it's state attribute?	
+			Join<Cabin,Address> address = root.join( Cabin_.address );
+			temp = builder.and(temp,builder.equal(address.get(Address_.state),cabin.getAddress().getState()));
 		}
-		Predicate temp = null;
 		if (cabin.isFirePit()) {
-			temp = builder.and(builder.isTrue(root.get(Cabin_.firePit)));
+			temp = builder.and(temp,builder.isTrue(root.get(Cabin_.firePit)));
 		}
 		if (cabin.isFirePlace()) {
-			temp = builder.and(builder.isTrue(root.get(Cabin_.firePlace)));
+			temp = builder.and(temp,builder.isTrue(root.get(Cabin_.firePlace)));
 		}
 		if (cabin.isHotTub()) {
-			temp = builder.and(builder.isTrue(root.get(Cabin_.hotTub)));
+			temp = builder.and(temp,builder.isTrue(root.get(Cabin_.hotTub)));
 		}
 		query.where(temp);
 		

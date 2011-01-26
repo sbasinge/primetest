@@ -14,6 +14,8 @@
 		<glassfish.embedded.version>3.1-b04</glassfish.embedded.version>
 		<junit.version>4.8.1</junit.version>
 		<slf4j.version>1.5.9.RC1</slf4j.version>
+<!-- 		<primefaces.version>2.2-SNAPSHOT</primefaces.version>  -->
+		<primefaces.version>2.2.RC2</primefaces.version>
 	</properties>
 
 	<build>
@@ -42,7 +44,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>2.2.RC2</version>
+			<version>${primefaces.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.arquillian</groupId>

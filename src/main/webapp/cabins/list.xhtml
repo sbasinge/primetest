@@ -6,10 +6,11 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui" template="/layouts/template.xhtml">
 
 	<ui:define name="content">
+		<p:spacer height="30px;" width="100%"/>
 		<p:outputPanel id="cabinList">
-			<p:dataTable id="cabinTable" value="#{cabinSearchBean.allCabins}" var="_cabin" paginator="true" selection="#{cabinSearchBean.selectedCabin}" selectionMode="single"  
-                 rowSelectListener="#{cabinSearchBean.onRowSelectNavigate}" dblClickSelect="true" dynamic="true">
-				<p:column sortBy="#{_cabin.name}">
+			<p:dataTable id="cabinTable" value="#{cabinSearchBean.cabins}" var="_cabin" paginator="false" selection="#{cabinSearchBean.selectedCabin}" selectionMode="single"  
+                 rowSelectListener="#{cabinSearchBean.onRowSelectNavigate}" dblClickSelect="true" dynamic="true" lazy="false">
+				<p:column sortBy="#{_cabin.id}">
 					<f:facet name="header">ID</f:facet>
 					<h:outputText value="#{_cabin.id}" />
 				</p:column>
@@ -21,25 +22,25 @@
 					<f:facet name="header">Address ID</f:facet>
 					<h:outputText value="#{_cabin.address.id}" />
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{_cabin.address.city}">
 					<f:facet name="header">City</f:facet>
 					<h:outputText value="#{_cabin.address.city}" />
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{_cabin.address.state.name}">
 					<f:facet name="header">State</f:facet>
 					<h:outputText value="#{_cabin.address.state.name}" />
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{_cabin.address.zipCode}">
 					<f:facet name="header">Zip</f:facet>
 					<h:outputText value="#{_cabin.address.zipCode}" />
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{_cabin.rentalTerms.nightlyRental}">
 					<f:facet name="header">Nightly Rate</f:facet>
 					<h:outputText value="#{_cabin.rentalTerms.nightlyRental}">
 						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" type="currency" />
 					</h:outputText>
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{_cabin.averageRating}">
 					<f:facet name="header">Rating</f:facet>
 					<h:outputText value="#{_cabin.averageRating}">
 						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />

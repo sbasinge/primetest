@@ -55,9 +55,9 @@
 					<p:outputPanel id="mapInfoPanel" style="text-align:center;display:block;margin:auto;width:275px;height:75px;">
 						<h:outputText id="markerTitle" value="#{cabinSearchBean.marker.title}" />
 						<br />
-						<h:outputLabel id="ratingLabel" value="Average Rating: " for="test" />
-						<span id="test"> 
-							<span class="star-rating-control"> 
+						<span > 
+							<h:outputText id="ratingLabel" value="Average Rating" />
+							<span class="star-rating-control" id="test"> 
 								<ui:repeat value="#{cabinSearchBean.marker.data}" var="_temp">
 									<p:outputPanel rendered="#{_temp ge 1}">
 										<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a title="1">1</a></div>
