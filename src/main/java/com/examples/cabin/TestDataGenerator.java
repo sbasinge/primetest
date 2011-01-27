@@ -14,15 +14,18 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.primefaces.model.map.LatLng;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.RentalTerms;
 import com.examples.cabin.entity.Review;
+import com.examples.service.YahooLocatorService;
 
 @Named
 @ConversationScoped
@@ -38,6 +41,9 @@ public class TestDataGenerator extends AbstractPageBean {
 	@Inject
 	Conversation conversation;
 
+	@Inject
+	YahooLocatorService yahooService;
+	
 	private List<String> rawTestData;
 	private List<Cabin> testData = new ArrayList<Cabin>();
 	
@@ -136,5 +142,21 @@ public class TestDataGenerator extends AbstractPageBean {
 		log.info("Results: {}",results.size());
 		retVal = results.size();
 		return retVal;
+	}
+	
+	public void loadCabinsFromYahoo() throws ParserConfigurationException, SAXException {
+		yahooService.setSearchTerm("cabin");
+		yahooService.setZipCode("43152");
+		yahooService.setNumResults(20);
+		
+		for (int i=0; i < 10; i++) {
+			yahooService.setStartPosition(i*20);
+			yahooService.execute();
+			for(Cabin cabin : yahooService.getResults()) {
+				loadCabin(cabin);
+			}
+			
+		}
+		
 	}
 }

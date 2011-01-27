@@ -28,6 +28,10 @@
 			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
 		</p:commandButton>
 		<p:spacer height="10px" width="100%"/>
+		<p:commandButton id="addButton2" action="#{testDataGenerator.loadCabinsFromYahoo}" value="Add Yahoo Data">
+			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+		</p:commandButton>
+		<p:spacer height="10px" width="100%"/>
 		<p:outputPanel id="cabinList">
 			<p:dataTable id="cabinTable" value="#{cabinSearchBean.cabins}" var="_cabin">
 				<p:column>

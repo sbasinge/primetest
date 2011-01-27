@@ -140,10 +140,11 @@ public class CabinSearchBean extends AbstractPageBean {
 		mapCenter = new LatLng(40, -82);
 
 		for (Cabin cabin : getCabins()) {
-			log.debug("Processing cabin {}", cabin);
-			if (cabin.getAddress() != null && cabin.getAddress() != null
+			log.debug("Processing cabin {} at {}", cabin, cabin.getAddress().getGeoLocation().getLatLng().getLat());
+			if (cabin.getAddress() != null
 					&& cabin.getAddress().getGeoLocation() != null
 					&& cabin.getAddress().getGeoLocation().getLatLng() != null) {
+				log.debug("Adding overlay at {} {}", cabin.getAddress().getGeoLocation().getLatLng().getLat(), cabin.getAddress().getGeoLocation().getLatLng().getLng());
 				mapModel.addOverlay(new Marker(cabin.getAddress().getGeoLocation()
 						.getLatLng(), cabin.getName(),
 						cabin.getAverageRating(),
@@ -360,5 +361,13 @@ public class CabinSearchBean extends AbstractPageBean {
 		}
 		startingRange = minPrice;
 		endingRange = maxPrice;
+	}
+
+	public Conversation getConversation() {
+		return conversation;
+	}
+
+	public void setConversation(Conversation conversation) {
+		this.conversation = conversation;
 	}
 }
