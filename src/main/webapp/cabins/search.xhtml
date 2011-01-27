@@ -11,37 +11,30 @@
 	</ui:define>
 
 	<ui:define name="leftmenu">
-		<p:outputPanel id="searchCriteria" >
+		<h:panelGrid id="searchCriteria" columns="2">
 			<h:outputLabel value="City" for="city" />
 			<h:inputText id="city" value="#{cabinSearchBean.cabin.address.city}" />
-			<p:spacer height="10px" width="100%"/>
 			<h:outputLabel value="State" for="state" />
 			<h:selectOneMenu id="state" value="#{cabinSearchBean.cabin.address.state}" converter="StateEnumConverter">
 				<f:selectItems value="#{factories.states}" var="aState" itemLabel="#{aState.name}" />
 			</h:selectOneMenu>
-			<p:spacer height="10px" width="100%"/>
 			<h:outputLabel value="Zip" for="zipCode" />
 			<h:inputText id="zipCode" value="#{cabinSearchBean.cabin.address.zipCode}" />
-			<p:spacer height="10px" width="100%"/>
 			<h:outputLabel value="Fireplace?" for="firePlace" />
 			<h:selectBooleanCheckbox id="firePlace" value="#{cabinSearchBean.cabin.firePlace}" />
-			<p:spacer height="10px" width="100%"/>
 			<h:outputLabel value="Hot Tub?" for="hotTub" />
 			<h:selectBooleanCheckbox id="hotTub" value="#{cabinSearchBean.cabin.hotTub}" />
-			<p:spacer height="10px" width="100%"/>
 			<h:outputLabel value="Fire Pit?" for="firePit" />
 			<h:selectBooleanCheckbox id="firePit" value="#{cabinSearchBean.cabin.firePit}" />
-			<p:spacer height="10px" width="100%"/>
 			<h:outputLabel value="Price Low " for="startingRange"/>
 			<h:inputHidden value="#{cabinSearchBean.startingRange}" id="startingRange" />
 			<h:outputText id="lowOutput" value="#{cabinSearchBean.startingRange}"/>  
 			<p:slider id="priceLow" for="startingRange" display="lowOutput" maxValue="#{cabinSearchBean.maxPrice-10}" minValue="#{cabinSearchBean.minPrice}" style="width:200px"/>
-			<p:spacer height="10px" width="100%"/>
 			<h:outputLabel value="Price High " for="endingRange"/>
 			<h:inputHidden value="#{cabinSearchBean.endingRange}" id="endingRange" />
 			<h:outputText id="hiOutput" value="#{cabinSearchBean.endingRange}"/>  
 			<p:slider id="priceHigh" for="endingRange" display="hiOutput" maxValue="#{cabinSearchBean.maxPrice}" minValue="#{cabinSearchBean.minPrice+10}" style="width:200px"/>
-		</p:outputPanel>
+		</h:panelGrid>
 
 		<p:spacer height="10px" width="100%"/>
 		<p:spacer height="10px" width="100%"/>

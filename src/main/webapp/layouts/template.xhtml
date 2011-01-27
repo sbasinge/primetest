@@ -7,12 +7,15 @@
 	  
 <h:head>
 	<title>Cabin Finder</title>
+	<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/default.css" />
+	<link type="text/css" rel="stylesheet" href="#{request.contextPath}/themes/#{guestPreferences.theme}/skin.css" />
+	
 	<ui:insert name="heading"/>
 </h:head>
 
-<h:body>
+<h:body styleClass="ui-widget ui-widget-content">
 	<h:form id="masterForm">
-		<div id="topNav" style="margin-bottom:10px;width:100%;z-index:100;">
+		<div id="topNav" style="margin-bottom:10px;width:100%;z-index:100;" class="ui-widget ui-widget-content">
 			<p:dock position="top">
 				<p:menuitem style="z-index:100;" value="Home" icon="/images/dock/home.png" url="/cabins/search.jsf" />
 				<p:menuitem style="z-index:100;" value="Maintenance" icon="/images/dock/music.png" url="/cabins/simpleSearch.jsf" />
@@ -22,11 +25,45 @@
 				<p:menuitem style="z-index:100;" value="RSS" icon="/images/dock/rss.png" url="#" />
 				<p:menuitem style="z-index:100;" value="History" icon="/images/dock/history.png" url="#" />
 			</p:dock>
+				<p:commandButton id="themeButton" value="Change Theme: #{guestPreferences.theme}" onclick="themeMenu.show()" type="button" style="position:absolute;top:5px;left:5px; width:15%;font-size:10px;"/>
+				<p:menu widgetVar="themeMenu" position="dynamic" context="'themeForm:themeButton','tl','bl'" styleClass="themeMenu" style="font-size:10px;">
+					<p:submenu label="Themes">
+                        <p:menuitem value="Aristo" ajax="false"><f:setPropertyActionListener value="aristo" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Black-Tie" ajax="false"><f:setPropertyActionListener value="black-tie" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Blitzer" ajax="false"><f:setPropertyActionListener value="blitzer" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="BlueSky" ajax="false"><f:setPropertyActionListener value="bluesky" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Casablanca" ajax="false"><f:setPropertyActionListener value="casablanca" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Cupertino" ajax="false"><f:setPropertyActionListener value="cupertino" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Dark-Hive" ajax="false"><f:setPropertyActionListener value="dark-hive" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Dot-Luv" ajax="false"><f:setPropertyActionListener value="dot-luv" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Eggplant" ajax="false"><f:setPropertyActionListener value="eggplant" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Excite-Bike" ajax="false"><f:setPropertyActionListener value="excite-bike" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Flick" ajax="false"><f:setPropertyActionListener value="flick" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Hot-Sneaks" ajax="false"><f:setPropertyActionListener value="hot-sneaks" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Humanity" ajax="false"><f:setPropertyActionListener value="humanity" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Le-Frog" ajax="false"><f:setPropertyActionListener value="le-frog" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Mint-Choc" ajax="false"><f:setPropertyActionListener value="mint-choc" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Overcast" ajax="false"><f:setPropertyActionListener value="overcast" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Pepper-Grinder" ajax="false"><f:setPropertyActionListener value="pepper-grinder" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Redmond" ajax="false"><f:setPropertyActionListener value="redmond" target="#{guestPreferences.theme}" /></p:menuitem>
+                        <p:menuitem value="Sam" ajax="false"><f:setPropertyActionListener value="sam" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Smoothness" ajax="false"><f:setPropertyActionListener value="smoothness" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="South-Street" ajax="false"><f:setPropertyActionListener value="south-street" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Start" ajax="false"><f:setPropertyActionListener value="start" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Sunny" ajax="false"><f:setPropertyActionListener value="sunny" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Swanky-Purse" ajax="false"><f:setPropertyActionListener value="swanky-purse" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Trontastic" ajax="false"><f:setPropertyActionListener value="trontastic" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="UI-Lightness" ajax="false"><f:setPropertyActionListener value="ui-lightness" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="UI-Darkness" ajax="false"><f:setPropertyActionListener value="ui-darkness" target="#{guestPreferences.theme}" /></p:menuitem>
+						<p:menuitem value="Vader" ajax="false"><f:setPropertyActionListener value="vader" target="#{guestPreferences.theme}" /></p:menuitem>
+					</p:submenu>
+				</p:menu>
+			
 		</div>
  		<div id="leftnav" style="float:left;width:20%;font-size:12px;"  class="ui-widget ui-widget-content">
 			<ui:insert name="leftmenu"/>
 		</div>
-		<div id="content" class="ui-widget" style="float:right;width:78%;">
+		<div id="content" style="float:right;width:78%;" class="ui-widget ui-widget-content">
 			<p:messages id="msgs" showDetail="true" globalOnly="false"/> 
 			<ui:insert name="content"/>
 		</div>
