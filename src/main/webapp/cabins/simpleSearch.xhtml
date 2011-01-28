@@ -28,9 +28,16 @@
 			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
 		</p:commandButton>
 		<p:spacer height="10px" width="100%"/>
-		<p:commandButton id="addButton2" action="#{testDataGenerator.loadCabinsFromYahoo}" value="Add Yahoo Data">
-			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-		</p:commandButton>
+		<h:outputLabel value="Num Results" for="numResults" />
+		<h:inputText id="numResults" value="#{yahooLocatorService.numResults}" />
+		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="Search Term" for="searchTerm" />
+		<h:inputText id="searchTerm" value="#{yahooLocatorService.searchTerm}" />
+		<p:spacer height="10px" width="100%"/>
+		<h:outputLabel value="Zip Code" for="zipCode" />
+		<h:inputText id="zipCode" value="#{yahooLocatorService.zipCode}" />
+		<p:spacer height="10px" width="100%"/>
+		<h:commandButton id="addButton2" action="#{yahooLocatorService.loadCabins}" value="Add Yahoo Data" />
 		<p:spacer height="10px" width="100%"/>
 		<p:outputPanel id="cabinList">
 			<p:dataTable id="cabinTable" value="#{cabinSearchBean.cabins}" var="_cabin">

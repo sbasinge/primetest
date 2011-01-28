@@ -59,12 +59,12 @@
 				overlaySelectListener="#{cabinSearchBean.onMarkerSelect}" rendered="#{not empty cabinSearchBean.cabins}">
 				<p:gmapInfoWindow id="mapInfo">
 					<p:outputPanel id="mapInfoPanel" style="text-align:center;display:block;margin:auto;width:275px;height:75px;">
-						<h:outputText id="markerTitle" value="#{cabinSearchBean.marker.title}" />
+						<h:outputText id="markerTitle" value="#{cabinSearchBean.selectedCabin.name}" />
 						<br />
 						<span > 
 							<h:outputText id="ratingLabel" value="Average Rating" />
 							<span class="star-rating-control" id="test"> 
-								<ui:repeat value="#{cabinSearchBean.marker.data}" var="_temp">
+								<ui:repeat value="#{cabinSearchBean.selectedCabin.averageRating}" var="_temp">
 									<p:outputPanel rendered="#{_temp ge 1}">
 										<div class="star-rating rater-0 star-rating-applied star-rating-live star-rating-on"><a title="1">1</a></div>
 									</p:outputPanel>
@@ -97,6 +97,7 @@
 									</p:outputPanel>
 								</ui:repeat> 
 							</span> 
+							<h:outputLink target="_blank" title="#{cabinSearchBean.selectedCabin.name}" value="#{cabinSearchBean.selectedCabin.url}" rendered="#{not empty cabinSearchBean.selectedCabin.url}">WebSite</h:outputLink>
 						</span>
 					</p:outputPanel>
 				</p:gmapInfoWindow>

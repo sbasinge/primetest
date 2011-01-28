@@ -7,7 +7,12 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -25,18 +30,52 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.GeoLocation;
+import com.examples.cabin.AbstractPageBean;
 import com.examples.cabin.State;
 
 @Named
-public class YahooLocatorService implements Serializable {
+@ConversationScoped
+public class YahooLocatorService extends AbstractPageBean  {
 	Logger log = LoggerFactory.getLogger(YahooLocatorService.class);
 	static final String url = "http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=YahooDemo";
+
+	@PersistenceContext
+	EntityManager db;
+
+	@Inject
+	UserTransaction userTransaction;
 
 	String searchTerm;
 	int numResults = 20;
 	int startPosition = 0;
 	String zipCode = "43152";
 	List<Cabin> results;
+
+	public void loadCabins() throws ParserConfigurationException, SAXException {
+		if (searchTerm != null || searchTerm.trim().length()==0) {
+			for (int i=0; i < 10; i++) {
+				setStartPosition(i*20);
+				execute();
+				for(Cabin cabin : getResults()) {
+					loadCabin(cabin);
+				}
+			}
+		} else {
+			addWarn(null,"Warning","Search term is empty");
+		}
+		
+	}
+
+	private void loadCabin(Cabin cabin) {
+		try {
+			userTransaction.begin();
+			db.persist(cabin);
+			userTransaction.commit();
+		} catch (Exception e) {
+			log.error("Error loading cabin",e);
+		}
+		
+	}
 
 	public void execute() throws ParserConfigurationException, SAXException {
 		results = new ArrayList<Cabin>();
@@ -68,6 +107,7 @@ public class YahooLocatorService implements Serializable {
 	}
 
 	public void setSearchTerm(String searchTerm) {
+		log.debug("Setting searchTerm to {}",searchTerm);
 		this.searchTerm = searchTerm;
 	}
 
@@ -77,23 +117,6 @@ public class YahooLocatorService implements Serializable {
 
 	public void setNumResults(int numResults) {
 		this.numResults = numResults;
-	}
-
-	public static void main(String args[]) {
-		YahooLocatorService service = new YahooLocatorService();
-		service.setSearchTerm("cabin");
-		service.setNumResults(5);
-		service.setZipCode("43152");
-		try {
-			service.execute();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(service.getResults());
 	}
 
 	public String getZipCode() {
@@ -141,7 +164,7 @@ public class YahooLocatorService implements Serializable {
 				Attributes attributes) throws SAXException {
 			tagInProcess = localName != null && localName.length()>0 ? localName : name;
 			
-			log.info("Processing startElement {}", tagInProcess);
+			log.trace("Processing startElement {}", tagInProcess);
 			// If <Result>-tag was found, a new location must be created.
 			if (tagInProcess.equals("Result")) {
 				log.info("Starting new cabin");
@@ -154,7 +177,7 @@ public class YahooLocatorService implements Serializable {
 				throws SAXException {
 			if (cabins.size()==0)
 				return;
-			log.info("Processing endElement {}", tagInProcess);
+			log.trace("Processing endElement {}", tagInProcess);
 			Cabin currentCabin = cabins.get(cabins.size()-1);
 			// <Result>-tag is closed. Save the location, as there will be
 			// a new location created when the next <Result> is found.
@@ -174,7 +197,7 @@ public class YahooLocatorService implements Serializable {
 				currentCabin.setAddress(new Address());
 			
 			String s = new String(ch, start, length).trim();
-			log.info("Processing characters {} for tag {}", s, tagInProcess);
+			log.debug("Processing characters {} for tag {}", s, tagInProcess);
 
 			if ("Title".equalsIgnoreCase(tagInProcess)) {
 				currentCabin.setName(s);

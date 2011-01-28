@@ -147,7 +147,7 @@ public class CabinSearchBean extends AbstractPageBean {
 				log.debug("Adding overlay at {} {}", cabin.getAddress().getGeoLocation().getLatLng().getLat(), cabin.getAddress().getGeoLocation().getLatLng().getLng());
 				mapModel.addOverlay(new Marker(cabin.getAddress().getGeoLocation()
 						.getLatLng(), cabin.getName(),
-						cabin.getAverageRating(),
+						cabin.getId(),
 						"http://maps.google.com/mapfiles/ms/micons/blue-dot.png"));
 				// mapModel.addOverlay(new Marker(coord1));
 				setMapCenter(cabin.getAddress().getGeoLocation().getLatLng());
@@ -174,7 +174,14 @@ public class CabinSearchBean extends AbstractPageBean {
 
 	public void onMarkerSelect(OverlaySelectEvent event) {
 		marker = (Marker) event.getOverlay();
+		int id = (Integer) marker.getData();
 		log.info("Marker selected for {}", marker.getLatlng());
+		for (Cabin cabin: cabins) {
+			if (cabin.getId()==id) {
+				selectedCabin = cabin;
+				break;
+			}
+		}
 		addInfo("msgs","select","marker selected.");
 	}
 
