@@ -91,6 +91,10 @@ public class Cabin extends AbstractEntity {
 		return name;
 	}
 
+	public String getEscapedName() {
+		return name.replaceAll("'", "");
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}

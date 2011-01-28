@@ -140,17 +140,15 @@ public class CabinSearchBean extends AbstractPageBean {
 		mapCenter = new LatLng(40, -82);
 
 		for (Cabin cabin : getCabins()) {
-			log.debug("Processing cabin {} at {}", cabin, cabin.getAddress().getGeoLocation().getLatLng().getLat());
-			if (cabin.getAddress() != null
-					&& cabin.getAddress().getGeoLocation() != null
-					&& cabin.getAddress().getGeoLocation().getLatLng() != null) {
-				log.debug("Adding overlay at {} {}", cabin.getAddress().getGeoLocation().getLatLng().getLat(), cabin.getAddress().getGeoLocation().getLatLng().getLng());
-				mapModel.addOverlay(new Marker(cabin.getAddress().getGeoLocation()
-						.getLatLng(), cabin.getName(),
+			LatLng latLng = cabin.getAddress().getGeoLocation().createLatLng();
+			log.debug("Processing cabin {} at {}", cabin, cabin.getAddress().getGeoLocation().getLat());
+			if (cabin.getAddress() != null && cabin.getAddress().getGeoLocation() != null) {
+				log.debug("Adding overlay at {} {}", cabin.getAddress().getGeoLocation().getLat(), cabin.getAddress().getGeoLocation().getLng());
+				mapModel.addOverlay(new Marker(latLng, cabin.getEscapedName(),
 						cabin.getId(),
 						"http://maps.google.com/mapfiles/ms/micons/blue-dot.png"));
 				// mapModel.addOverlay(new Marker(coord1));
-				setMapCenter(cabin.getAddress().getGeoLocation().getLatLng());
+				setMapCenter(latLng);
 			}
 		}
 

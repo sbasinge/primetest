@@ -54,7 +54,8 @@ public class YahooLocatorService extends AbstractPageBean  {
 	public void loadCabins() throws ParserConfigurationException, SAXException {
 		if (searchTerm != null || searchTerm.trim().length()==0) {
 			for (int i=0; i < 10; i++) {
-				setStartPosition(i*20);
+				if (i>0)
+					setStartPosition(1+(i*20));
 				execute();
 				for(Cabin cabin : getResults()) {
 					loadCabin(cabin);
@@ -217,8 +218,8 @@ public class YahooLocatorService extends AbstractPageBean  {
 			} else if ("Longitude".equalsIgnoreCase(tagInProcess)) {
 				String tempLat = formatter.format(Double.parseDouble(latitude));
 				String tempLng = formatter.format(Double.parseDouble(s));
-				LatLng latLng = new LatLng(Double.parseDouble(tempLat),Double.parseDouble(tempLng));
-				currentCabin.getAddress().getGeoLocation().setLatLng(latLng);
+				currentCabin.getAddress().getGeoLocation().setLat(Double.parseDouble(tempLat));
+				currentCabin.getAddress().getGeoLocation().setLng(Double.parseDouble(tempLng));
 			} else if ("BusinessUrl".equalsIgnoreCase(tagInProcess)) {
 				currentCabin.setUrl(s);
 			}

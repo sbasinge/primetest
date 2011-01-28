@@ -21,6 +21,10 @@
 			</h:selectOneMenu>
 			<h:outputLabel value="Zip" for="zipCode" />
 			<h:inputText id="zipCode" value="#{cabinSearchBean.selectedCabin.address.zipCode}" />
+			<h:outputLabel value="Lat" for="lat" />
+			<h:inputText id="lat" value="#{cabinSearchBean.selectedCabin.address.geoLocation.lat}" />
+			<h:outputLabel value="Lng" for="lng" />
+			<h:inputText id="lng" value="#{cabinSearchBean.selectedCabin.address.geoLocation.lng}" />
 			<h:outputLabel value="WebSite" for="url" />
 			<h:inputText id="url" value="#{cabinSearchBean.selectedCabin.url}" />
 			<h:outputLabel value="Image" for="imageUrl" />

@@ -17,25 +17,11 @@ import org.primefaces.model.map.LatLng;
 //@Entity
 @Embeddable
 public class GeoLocation implements Serializable {
-//	@Id
-//	@GeneratedValue
-//	int id;
-
-	LatLng latLng;
-	
-//	@OneToOne(mappedBy="location", cascade=CascadeType.ALL)
-//	Address address;
+	double lat;
+	double lng;
 	
 	@Temporal(TemporalType.DATE)
 	Date lastGeoLookup;
-
-	public LatLng getLatLng() {
-		return latLng;
-	}
-
-	public void setLatLng(LatLng latLng) {
-		this.latLng = latLng;
-	}
 
 	public Date getLastGeoLookup() {
 		return lastGeoLookup;
@@ -44,5 +30,24 @@ public class GeoLocation implements Serializable {
 	public void setLastGeoLookup(Date lastGeoLookup) {
 		this.lastGeoLookup = lastGeoLookup;
 	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLng() {
+		return lng;
+	}
+
+	public void setLng(double lng) {
+		this.lng = lng;
+	}
 	
+	public LatLng createLatLng() {
+		return new LatLng(lat,lng);
+	}
 }

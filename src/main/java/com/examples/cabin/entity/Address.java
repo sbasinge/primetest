@@ -45,7 +45,8 @@ public class Address extends AbstractEntity {
 		this.city = city;
 		this.state = state;
 		this.geoLocation = new GeoLocation();
-		this.geoLocation.latLng = new LatLng(lat, lng);
+		this.geoLocation.lat = lat;
+		this.geoLocation.lng = lng;
 		this.geoLocation.lastGeoLookup = Calendar.getInstance().getTime();
 		this.zipCode = zip;
 	}

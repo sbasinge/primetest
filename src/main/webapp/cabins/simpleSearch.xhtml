@@ -24,6 +24,9 @@
 			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
 		</p:commandButton>
 		<p:spacer height="10px" width="100%"/>
+		<p:commandButton id="deleteButton" action="#{testDataGenerator.deleteExistingCabins}" value="Delete Cabins">
+			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+		</p:commandButton>
 		<p:commandButton id="addButton" action="#{testDataGenerator.loadTestData}" value="Add Test Data">
 			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
 		</p:commandButton>

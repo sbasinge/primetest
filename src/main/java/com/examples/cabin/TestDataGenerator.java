@@ -88,7 +88,7 @@ public class TestDataGenerator extends AbstractPageBean {
 
 	}
 
-	private void deleteExistingCabins() {
+	public void deleteExistingCabins() {
 		try {
 			userTransaction.begin();
 			db.joinTransaction();
