@@ -14,7 +14,7 @@
 		<glassfish.embedded.version>3.1-b04</glassfish.embedded.version>
 		<junit.version>4.8.1</junit.version>
 		<slf4j.version>1.5.9.RC1</slf4j.version>
-<!-- 		<primefaces.version>2.2-SNAPSHOT</primefaces.version>  -->
+		<!-- <primefaces.version>2.2-SNAPSHOT</primefaces.version> -->
 		<primefaces.version>2.2.RC2</primefaces.version>
 	</properties>
 
@@ -98,6 +98,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.weld</groupId>
+			<artifactId>weld-logger</artifactId>
+			<version>1.0.0-CR2</version>
 		</dependency>
 	</dependencies>
 

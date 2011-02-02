@@ -30,6 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.GeoLocation;
+import com.examples.cabin.entity.Review;
 import com.examples.cabin.AbstractPageBean;
 import com.examples.cabin.State;
 
@@ -57,6 +58,8 @@ public class YahooLocatorService extends AbstractPageBean  {
 				if (i>0)
 					setStartPosition(1+(i*20));
 				execute();
+				if (results.size()==0)
+					break;
 				for(Cabin cabin : getResults()) {
 					loadCabin(cabin);
 				}
@@ -130,11 +133,13 @@ public class YahooLocatorService extends AbstractPageBean  {
 
 	class Parser extends DefaultHandler {
 		Logger log = LoggerFactory.getLogger(Parser.class);
-
+		static final int MAXLENGTH = 250;
+		
 		NumberFormat formatter = new DecimalFormat("#.000");
 		List<Cabin> cabins = new ArrayList<Cabin>();
 		String tagInProcess;
 		String latitude;
+		Review review;
 		
 		public List<Cabin> parseResults(GetMethod method)
 				throws ParserConfigurationException, SAXException, IOException {
@@ -222,6 +227,18 @@ public class YahooLocatorService extends AbstractPageBean  {
 				currentCabin.getAddress().getGeoLocation().setLng(Double.parseDouble(tempLng));
 			} else if ("BusinessUrl".equalsIgnoreCase(tagInProcess)) {
 				currentCabin.setUrl(s);
+			} else if ("AverageRating".equalsIgnoreCase(tagInProcess)) {
+				try {
+					review = new Review();
+					review.setRating(Integer.parseInt(s));
+					currentCabin.addReview(review);
+				} catch (Exception e) {
+				}
+			} else if ("LastReviewIntro".equalsIgnoreCase(tagInProcess)) {
+				String temp =  currentCabin.getLastReview().getComments() + s;
+				if (temp.length()>MAXLENGTH)
+					temp = temp.substring(0,MAXLENGTH);
+				currentCabin.getLastReview().setComments(temp);
 			}
 		}
 	}
