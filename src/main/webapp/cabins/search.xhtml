@@ -34,6 +34,8 @@
 			<h:inputHidden value="#{cabinSearchBean.endingRange}" id="endingRange" />
 			<h:outputText id="hiOutput" value="#{cabinSearchBean.endingRange}"/>  
 			<p:slider id="priceHigh" for="endingRange" display="hiOutput" maxValue="#{cabinSearchBean.maxPrice}" minValue="#{cabinSearchBean.minPrice+10}" style="width:100%"/>
+			<h:outputLabel value="Min Rating " for="rating"/>
+			<p:spinner id="rating" value="#{cabinSearchBean.rating}" max="5" min="0"></p:spinner>
 		</h:panelGrid>
 
 		<p:spacer height="10px" width="100%"/>

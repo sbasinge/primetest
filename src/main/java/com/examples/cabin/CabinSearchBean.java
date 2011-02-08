@@ -70,6 +70,8 @@ public class CabinSearchBean extends AbstractPageBean {
 	private double endingRange;
 	private double minPrice;
 	private double maxPrice;
+	private int rating;
+	
 	
 	public java.lang.Double getMaxStars() {
 		return maxStars;
@@ -317,7 +319,16 @@ public class CabinSearchBean extends AbstractPageBean {
 		}
 		query.where(temp);
 		
-		retVal = db.createQuery(query).getResultList();		
+		retVal = db.createQuery(query).getResultList();
+		if (this.getRating() >= 1) {
+			List<Cabin> tempResult = new ArrayList<Cabin>();
+			for (Cabin cabin: retVal) {
+				if (cabin.getAverageRating()>= getRating()) {
+					tempResult.add(cabin);
+				}
+			}
+			retVal = tempResult;
+		}
 		return retVal;
 	}
 
@@ -374,5 +385,13 @@ public class CabinSearchBean extends AbstractPageBean {
 
 	public void setConversation(Conversation conversation) {
 		this.conversation = conversation;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
 	}
 }

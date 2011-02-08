@@ -1,7 +1,8 @@
 package com.examples.service;
 
 import java.io.IOException;
-import java.io.Serializable;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -17,22 +18,19 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.primefaces.model.map.LatLng;
+import org.hibernate.validator.util.privilegedactions.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.examples.cabin.AbstractPageBean;
+import com.examples.cabin.State;
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.GeoLocation;
 import com.examples.cabin.entity.Review;
-import com.examples.cabin.AbstractPageBean;
-import com.examples.cabin.State;
 
 @Named
 @ConversationScoped
@@ -88,18 +86,14 @@ public class YahooLocatorService extends AbstractPageBean  {
 		if (startPosition > 0)
 			request += "&start="+startPosition;
 		log.info("Executing: {}",request);
-		HttpClient client = new HttpClient();
-		GetMethod method = new GetMethod(request);
 
 		// Send GET request
 		try {
-			int statusCode = client.executeMethod(method);
+			URL url = new URL(request);
+			InputStream stream = url.openStream();
 			// readResults(method);
 			Parser parser = new Parser();
-			results = parser.parseResults(method);
-		} catch (HttpException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			results = parser.parseResults(stream);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -141,12 +135,12 @@ public class YahooLocatorService extends AbstractPageBean  {
 		String latitude;
 		Review review;
 		
-		public List<Cabin> parseResults(GetMethod method)
+		public List<Cabin> parseResults(InputStream stream)
 				throws ParserConfigurationException, SAXException, IOException {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser;
 			saxParser = factory.newSAXParser();
-			saxParser.parse(method.getResponseBodyAsStream(), this);
+			saxParser.parse(stream, this);
 			return cabins;
 		}
 
