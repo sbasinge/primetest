@@ -39,6 +39,12 @@
 			<url>http://repository.prime.com.tr</url>
 			<layout>default</layout>
 		</repository>
+		<repository>
+			<id>jboss-repo</id>
+			<name>JBoss Nexus</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
+			<layout>default</layout>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
