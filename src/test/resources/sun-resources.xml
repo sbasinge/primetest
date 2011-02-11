@@ -3,7 +3,7 @@
    "http://www.sun.com/software/appserver/dtds/sun-resources_1_4.dtd">
 <resources>
    <jdbc-resource pool-name="ArquillianEmbeddedDerbyPool"
-      jndi-name="jdbc/arquillian"/>
+      jndi-name="jdbc/primetest"/>
    <jdbc-connection-pool name="ArquillianEmbeddedDerbyPool"
       res-type="javax.sql.DataSource"
       datasource-classname="org.apache.derby.jdbc.EmbeddedDataSource"

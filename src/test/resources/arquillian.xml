@@ -11,7 +11,7 @@
    -->
 
    <glassfish-embedded:container>
-      <glassfish-embedded:sunResourcesXml>src/test/resources-glassfish-embedded/sun-resources.xml</glassfish-embedded:sunResourcesXml>
+      <glassfish-embedded:sunResourcesXml>src/test/resources/sun-resources.xml</glassfish-embedded:sunResourcesXml>
    </glassfish-embedded:container>  
 
 </arquillian>
