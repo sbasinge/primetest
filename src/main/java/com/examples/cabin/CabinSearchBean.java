@@ -7,7 +7,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -34,6 +33,7 @@ import org.primefaces.model.map.Marker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.examples.annotation.Transactional;
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Address_;
 import com.examples.cabin.entity.Cabin;
@@ -51,9 +51,6 @@ public class CabinSearchBean extends AbstractPageBean {
 	EntityManager db;
 
 	@Inject
-	UserTransaction userTransaction;
-
-	@Inject
 	Conversation conversation;
 
 	private Cabin cabin;
@@ -62,6 +59,7 @@ public class CabinSearchBean extends AbstractPageBean {
 	private LatLng mapCenter;
 	private State state;
 	private Cabin selectedCabin;
+	private RentalTerms selectedRentalTerms;
 
 	private Marker marker;
 	private java.lang.Double defaultRating = 2.5;
@@ -222,15 +220,20 @@ public class CabinSearchBean extends AbstractPageBean {
 		return "edit.jsf?faces-redirect=true";
 	}
 
+	public String onRentalRowSelectNavigate(SelectEvent event) {
+		setSelectedRentalTerms((RentalTerms) event.getObject());
+		log.info("redirecting");
+		return "/rentalTerms/edit.jsf?faces-redirect=true";
+	}
+
+	@Transactional
 	public String saveUpdates() {
 		boolean success = true;
 		log.info("Saving cabin {}",selectedCabin);
 		String retVal = "list.jsf?faces-redirect=true";
 		try {
-			userTransaction.begin();
 			db.merge(selectedCabin);
 			db.flush();
-			userTransaction.commit();
 		} catch (Exception e) {
 			retVal = null;
 			success = false;
@@ -242,15 +245,14 @@ public class CabinSearchBean extends AbstractPageBean {
 		return retVal;
 	}
 
+	@Transactional
 	public String deleteSelectedCabin() {
 		boolean success = true;
 		log.info("Deleting cabin {}",selectedCabin);
 		String retVal = "list.jsf?faces-redirect=true";
 		try {
-			userTransaction.begin();
 			Cabin temp = db.find(Cabin.class, selectedCabin.getId());
 			db.remove(temp);
-			userTransaction.commit();
 		} catch (Exception e) {
 			retVal = null;
 			success = false;
@@ -393,5 +395,23 @@ public class CabinSearchBean extends AbstractPageBean {
 
 	public void setRating(int rating) {
 		this.rating = rating;
+	}
+	
+	/**
+	 * Take the selected cabin and store/pass to the rental terms edit page so terms are added to the selected cabin.
+	 * 
+	 * @return
+	 */
+	public String addRentalTerms() {
+		String retVal = "/rentalTerms/add.jsf?faces-redirect=true";
+		return retVal;
+	}
+
+	public void setSelectedRentalTerms(RentalTerms selectedRentalTerms) {
+		this.selectedRentalTerms = selectedRentalTerms;
+	}
+
+	public RentalTerms getSelectedRentalTerms() {
+		return selectedRentalTerms;
 	}
 }

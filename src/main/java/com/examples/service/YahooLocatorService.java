@@ -18,13 +18,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.hibernate.validator.util.privilegedactions.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.examples.annotation.Transactional;
 import com.examples.cabin.AbstractPageBean;
 import com.examples.cabin.State;
 import com.examples.cabin.entity.Address;
@@ -41,15 +41,13 @@ public class YahooLocatorService extends AbstractPageBean  {
 	@PersistenceContext
 	EntityManager db;
 
-	@Inject
-	UserTransaction userTransaction;
-
 	String searchTerm;
 	int numResults = 20;
 	int startPosition = 0;
 	String zipCode = "43152";
 	List<Cabin> results;
 
+	@Transactional
 	public void loadCabins() throws ParserConfigurationException, SAXException {
 		if (searchTerm != null || searchTerm.trim().length()==0) {
 			for (int i=0; i < 10; i++) {
@@ -68,11 +66,10 @@ public class YahooLocatorService extends AbstractPageBean  {
 		
 	}
 
+	@Transactional
 	private void loadCabin(Cabin cabin) {
 		try {
-			userTransaction.begin();
 			db.persist(cabin);
-			userTransaction.commit();
 		} catch (Exception e) {
 			log.error("Error loading cabin",e);
 		}

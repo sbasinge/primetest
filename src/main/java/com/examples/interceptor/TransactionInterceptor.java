@@ -26,6 +26,15 @@ public class TransactionInterceptor implements Serializable {
 			throws Exception {
 		log.debug("TransactionInterceptor fired");
 		try {
+//			boolean transactionStarted = false;
+//			try {
+//				db.joinTransaction(); 
+//			} catch (javax.persistence.TransactionRequiredException e) {
+//				userTransaction.begin();
+//				db.joinTransaction();
+//				transactionStarted = true;
+//			}
+			
 			tx.begin();
 			Object result = invocation.proceed();
 			tx.commit();

@@ -41,9 +41,6 @@ public class TestDataGenerator extends AbstractPageBean {
 	EntityManager db;
 
 	@Inject
-	UserTransaction userTransaction;
-
-	@Inject
 	Conversation conversation;
 
 	private List<String> rawTestData;

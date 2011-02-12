@@ -104,7 +104,7 @@
    </category>
 
    <category name="com.examples">
-     <priority value="ALL" />
+     <priority value="DEBUG" />
    </category>
 
 

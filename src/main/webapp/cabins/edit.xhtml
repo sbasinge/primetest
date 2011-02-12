@@ -38,7 +38,7 @@
 		</h:panelGrid>
 		<p:accordionPanel autoHeight="false">
 			<p:tab title="rentalTerms">
-				<p:dataTable id="rentalTermsTable" value="#{cabinSearchBean.selectedCabin.rentalTerms}" var="_rentalTerm" paginator="true" selectionMode="single" dblClickSelect="true">
+				<p:dataTable id="rentalTermsTable" value="#{cabinSearchBean.selectedCabin.rentalTerms}" var="_rentalTerm" paginator="true" selectionMode="single" dblClickSelect="true" rowSelectListener="#{cabinSearchBean.onRentalRowSelectNavigate}" >
 					<p:column>
 						<f:facet name="header">ID</f:facet>
 						<h:outputText value="#{_rentalTerm.id}" />
@@ -64,6 +64,9 @@
 						<h:outputText value="#{_rentalTerm.weeklyRental}" />
 					</p:column>
 				</p:dataTable>
+				<p:commandButton id="addTermsButton"  action="#{cabinSearchBean.addRentalTerms}" value="Add" update="msgs">
+					<f:param name="cabinId" value="#{cabinSearchBean.selectedCabin.id}" />
+				</p:commandButton>
 			</p:tab>
 			<p:tab title="Reviews">
 				<p:dataTable id="reviewsTable" value="#{cabinSearchBean.selectedCabin.reviews}" var="_review" paginator="true" selectionMode="single" dblClickSelect="true">

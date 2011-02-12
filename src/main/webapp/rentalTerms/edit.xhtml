@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui" template="/layouts/template.xhtml">
+
+	<ui:define name="content">
+		<h:panelGrid columns="6">
+			<h:outputLabel value="Name" for="name" />
+			<h:inputText id="name" value="#{cabinSearchBean.selectedCabin.name}" />
+			<h:outputLabel value="Based On" for="basedOn" />
+			<h:inputText id="basedOn" value="#{rentalTermsBean.rentalTerms.basedOn}" />
+			<h:outputLabel value="Max Occupants" for="maxOccupants" />
+			<h:inputText id="maxOccupants" value="#{rentalTermsBean.rentalTerms.maxOccupants}" />
+			<h:outputLabel value="Nightly Rental" for="nightlyRental" />
+			<h:inputText id="nightlyRental" value="#{rentalTermsBean.rentalTerms.nightlyRental}" />
+			<h:outputLabel value="Additional Per Person" for="additionalPerPerson" />
+			<h:inputText id="additionalPerPerson" value="#{rentalTermsBean.rentalTerms.additionalPerPerson}" />
+		</h:panelGrid>
+		<p:commandButton id="saveButton" action="#{rentalTermsBean.saveUpdates}" value="Save" update="msgs">
+			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+		</p:commandButton>
+		<p:commandButton id="deleteButton" action="#{rentalTermsBean.deleteSelected}" value="Delete" update="msgs">
+			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+		</p:commandButton>
+		<p:commandButton id="cancelButton" action="#{rentalTermsBean.cancelEdit}" value="Cancel" update="msgs">
+			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

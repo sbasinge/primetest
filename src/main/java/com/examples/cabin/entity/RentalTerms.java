@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 @Entity
 public class RentalTerms extends AbstractEntity {
 //	@Id
@@ -65,6 +67,13 @@ public class RentalTerms extends AbstractEntity {
 	}
 	public void setMaxOccupants(Integer maxOccupants) {
 		this.maxOccupants = maxOccupants;
+	}
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).appendSuper(super.toString())
+				.append("id", this.getId()).append("basedOn", this.getBasedOn())
+				.append("nightlyRental", this.getNightlyRental())
+				.toString();
 	}
 
 }
