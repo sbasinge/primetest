@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:p="http://primefaces.prime.com.tr/ui" template="/layouts/template.xhtml">
+
+	<ui:define name="content">
+		<p:spacer height="30px;" width="100%"/>
+		<p:outputPanel id="ammenityList">
+			<p:dataTable id="ammenityTable" value="#{hockingHillsRentalsService.results}" var="_ammenity" paginator="false" selection="#{hockingHillsRentalsService.selectedAmmenities}" selectionMode="single"  
+                 rowSelectListener="#{hockingHillsRentalsService.onRowSelectNavigate}" dblClickSelect="true" dynamic="true" lazy="false">
+				<p:column sortBy="#{_ammenity.name}">
+					<f:facet name="header">name</f:facet>
+					<h:outputText value="#{_ammenity.name}" />
+				</p:column>
+				<p:column sortBy="#{_ammenity.cabinName}">
+					<f:facet name="header">cabinName</f:facet>
+					<h:outputText value="#{_ammenity.cabinName}" />
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>

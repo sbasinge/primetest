@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.examples.cabin.entity.Review;
 
 public class ReviewBean extends AbstractPageBean {
-	Logger log = LoggerFactory.getLogger(CabinSearchBean.class);
+	Logger log = LoggerFactory.getLogger(RentalTermsBean.class);
 
 	private Review review;
 	

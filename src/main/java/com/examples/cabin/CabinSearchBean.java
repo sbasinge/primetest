@@ -19,7 +19,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
 
 import org.eclipse.persistence.jpa.JpaHelper;
 import org.eclipse.persistence.queries.QueryByExamplePolicy;
@@ -99,7 +98,6 @@ public class CabinSearchBean extends AbstractPageBean {
 	public void search() {
 		log.warn("Searching cabins for {}", cabin);
 		List<Cabin> results = null;
-//		results = queryByExample();
 		results = buildAndRunQuery();
 		log.info("Results: {}", results.size());
 		setCabins(results);
@@ -413,5 +411,10 @@ public class CabinSearchBean extends AbstractPageBean {
 
 	public RentalTerms getSelectedRentalTerms() {
 		return selectedRentalTerms;
+	}
+	
+	public String updateAmmenities() {
+		String retVal = "/ammenities/list.jsf?faces-redirect=true";
+		return retVal;
 	}
 }

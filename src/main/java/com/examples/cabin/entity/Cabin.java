@@ -41,12 +41,11 @@ public class Cabin extends AbstractEntity {
 	boolean hotTub;
 	boolean firePit;
 	boolean firePlace;
+	String phoneNumber;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="ADDRESS_ID")
 	Address address;
-
-	String phoneNumber;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	RentalTerms rentalTerms;

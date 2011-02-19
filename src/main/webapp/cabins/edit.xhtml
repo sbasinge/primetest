@@ -98,5 +98,9 @@
 		<p:commandButton id="cancelButton" action="#{cabinSearchBean.cancelEdit}" value="Cancel" update="msgs">
 			<f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
 		</p:commandButton>
+		<p:commandButton id="updateAmmenities" action="#{cabinSearchBean.updateAmmenities}" value="Update Online" update="msgs">
+			<f:param name="cabinId" value="#{cabinSearchBean.selectedCabin.id}" />
+		</p:commandButton>
+		
 	</ui:define>
 </ui:composition>

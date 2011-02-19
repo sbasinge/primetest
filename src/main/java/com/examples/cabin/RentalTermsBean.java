@@ -20,7 +20,7 @@ import com.examples.cabin.entity.RentalTerms;
 @Named
 @ConversationScoped
 public class RentalTermsBean extends AbstractPageBean {
-	Logger log = LoggerFactory.getLogger(CabinSearchBean.class);
+	Logger log = LoggerFactory.getLogger(RentalTermsBean.class);
 
 	@PersistenceContext
 	EntityManager em;
