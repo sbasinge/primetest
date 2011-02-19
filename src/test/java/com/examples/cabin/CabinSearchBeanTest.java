@@ -39,7 +39,7 @@ public class CabinSearchBeanTest extends AbstractTest {
 
 	@Test
 	@RequiredScope(ScopeType.CONVERSATION)
-	public void FindMatchingCabins() throws Exception {
+	public void FindCabinsWithFirePits() throws Exception {
 		utx.begin();
 		em.joinTransaction();
 		generator.loadTestData();
@@ -48,6 +48,20 @@ public class CabinSearchBeanTest extends AbstractTest {
 		List<Cabin> temp = bean.getCabins();
 		log.info("{} cabins found.", temp.size());
 		assertTrue("All cabins with firepits = 2",temp.size()==2);
+		utx.rollback();
+	}
+
+	@Test
+	@RequiredScope(ScopeType.CONVERSATION)
+	public void FindCabinsWithHotTubs() throws Exception {
+		utx.begin();
+		em.joinTransaction();
+		generator.loadTestData();
+		bean.getCabin().setHotTub(true);
+		bean.search();
+		List<Cabin> temp = bean.getCabins();
+		log.info("{} cabins found.", temp.size());
+		assertTrue("All cabins with hottubs = 2",temp.size()==2);
 		utx.rollback();
 	}
 
