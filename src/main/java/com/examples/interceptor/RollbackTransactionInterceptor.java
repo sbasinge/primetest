@@ -24,7 +24,7 @@ public class RollbackTransactionInterceptor implements Serializable {
 	@AroundInvoke
 	public Object workInTransaction(InvocationContext invocation)
 			throws Exception {
-		log.debug("RollbackTransactionInterceptor fired");
+		log.warn("RollbackTransactionInterceptor fired");
 		try {
 			tx.begin(); 
 			Object result = invocation.proceed();

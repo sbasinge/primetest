@@ -10,21 +10,10 @@ import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Transient;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.primefaces.model.map.LatLng;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 import com.examples.annotation.Transactional;
 import com.examples.cabin.entity.Address;
@@ -38,7 +27,7 @@ public class TestDataGenerator extends AbstractPageBean {
 	Logger log = LoggerFactory.getLogger(TestDataGenerator.class);
  
 	@PersistenceContext
-	EntityManager db;
+	EntityManager em;
 
 	@Inject
 	Conversation conversation;
@@ -84,25 +73,25 @@ public class TestDataGenerator extends AbstractPageBean {
 		}
 
 		for (Cabin cabin : testData) {
-			db.persist(cabin);
+			em.persist(cabin);
 		}
 		log.info("Test Data Loaded.");
 	}
 
 	@Transactional
 	public void deleteExistingCabins() {
-		List<Cabin> results = db.createQuery("select c from Cabin c")
+		List<Cabin> results = em.createQuery("select c from Cabin c")
 				.getResultList();
 		log.info("{} Cabins about to be deleted ...", results.size());
 		for (Cabin cabin : results) {
-			db.remove(cabin);
+			em.remove(cabin);
 		}
 		log.info("All cabins deleted.");
 	}
 
 	private int getNumberOfCabins() {
 		int retVal = 0;
-		List<Cabin> results = db.createQuery("select c from Cabin c")
+		List<Cabin> results = em.createQuery("select c from Cabin c")
 				.getResultList();
 		log.info("Currently there are {} cabins.", results.size());
 		retVal = results.size();

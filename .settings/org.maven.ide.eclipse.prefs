@@ -1,5 +1,5 @@
-#Thu Feb 10 07:04:19 EST 2011
-activeProfiles=testcontainer
+#Wed Jun 08 07:44:19 EDT 2011
+activeProfiles=
 eclipse.preferences.version=1
 fullBuildGoals=process-test-resources
 resolveWorkspaceProjects=true

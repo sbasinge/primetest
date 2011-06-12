@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.primefaces.model.map.LatLng;
@@ -22,6 +23,8 @@ import com.examples.cabin.State;
 
 @Entity
 public class Address extends AbstractEntity {
+	private static final long serialVersionUID = -6546490341498624723L;
+	
 //	@Id
 //	@GeneratedValue(strategy=GenerationType.IDENTITY)
 //	int id;

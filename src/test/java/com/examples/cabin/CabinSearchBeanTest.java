@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 
 import com.cdi.scope.RequiredScope;
 import com.cdi.scope.ScopeType;
+import com.examples.annotation.Transactional;
 import com.examples.cabin.entity.Cabin;
 
 @RunWith(Arquillian.class)
@@ -27,42 +28,35 @@ public class CabinSearchBeanTest extends AbstractTest {
 	@Test
 	@RequiredScope(ScopeType.CONVERSATION)
 	public void FindAllCabins() throws Exception {
-		utx.begin();
-		em.joinTransaction();
 		generator.loadTestData();
 		bean.populateAllCabins();
 		List<Cabin> temp = bean.getCabins();
 		log.info("{} cabins found.", temp.size());
 		assertTrue("All cabins = 4",temp.size()==4);
-		utx.rollback();
 	}
 
 	@Test
 	@RequiredScope(ScopeType.CONVERSATION)
+	@Transactional(rollback=true)
 	public void FindCabinsWithFirePits() throws Exception {
-		utx.begin();
-		em.joinTransaction();
 		generator.loadTestData();
 		bean.getCabin().setFirePit(true);
 		bean.search();
 		List<Cabin> temp = bean.getCabins();
 		log.info("{} cabins found.", temp.size());
 		assertTrue("All cabins with firepits = 2",temp.size()==2);
-		utx.rollback();
 	}
 
 	@Test
 	@RequiredScope(ScopeType.CONVERSATION)
+	@Transactional(rollback=true)
 	public void FindCabinsWithHotTubs() throws Exception {
-		utx.begin();
-		em.joinTransaction();
 		generator.loadTestData();
 		bean.getCabin().setHotTub(true);
 		bean.search();
 		List<Cabin> temp = bean.getCabins();
 		log.info("{} cabins found.", temp.size());
 		assertTrue("All cabins with hottubs = 2",temp.size()==2);
-		utx.rollback();
 	}
 
 }
