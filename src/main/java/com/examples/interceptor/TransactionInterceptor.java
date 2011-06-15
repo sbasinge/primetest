@@ -16,6 +16,11 @@ import com.examples.annotation.Transactional;
 @Transactional
 @Interceptor
 public class TransactionInterceptor implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static Logger log = LoggerFactory
 			.getLogger(TransactionInterceptor.class);
 

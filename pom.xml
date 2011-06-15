@@ -14,11 +14,9 @@
 		<glassfish.embedded.version>3.1-b04</glassfish.embedded.version>
 		<junit.version>4.8.1</junit.version>
 		<slf4j.version>1.5.9.RC1</slf4j.version>
-		<!-- <primefaces.version>2.2-SNAPSHOT</primefaces.version> 
-		<primefaces.version>3.0.M1</primefaces.version>
-		-->
+		<!-- <primefaces.version>2.2-SNAPSHOT</primefaces.version> <primefaces.version>3.0.M1</primefaces.version> -->
 		<primefaces.version>2.2.RC2</primefaces.version>
-		
+
 	</properties>
 
 	<build>
@@ -113,15 +111,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.sourceforge.nekohtml</groupId>
-			<artifactId>nekohtml</artifactId>
-			<version>1.9.14</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>3.5.0-Final</version>
+		</dependency>
+		<dependency>
+			<groupId>net.htmlparser.jericho</groupId>
+			<artifactId>jericho-html</artifactId>
+			<version>3.2</version>
 		</dependency>
 	</dependencies>
 

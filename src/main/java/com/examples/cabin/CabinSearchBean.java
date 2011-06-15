@@ -12,7 +12,6 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PostRemove;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -20,9 +19,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.eclipse.persistence.jpa.JpaHelper;
-import org.eclipse.persistence.queries.QueryByExamplePolicy;
-import org.eclipse.persistence.queries.ReadObjectQuery;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
@@ -44,6 +40,11 @@ import com.examples.cabin.entity.RentalTerms_;
 @ConversationScoped
 @Named
 public class CabinSearchBean extends AbstractPageBean {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	Logger log = LoggerFactory.getLogger(CabinSearchBean.class);
 
 	@PersistenceContext
@@ -270,25 +271,6 @@ public class CabinSearchBean extends AbstractPageBean {
 		String retVal = "list.jsf?faces-redirect=true";
 		db.clear();
 		conversation.end();
-		return retVal;
-	}
-	
-	/**
-	 * From stackoverflow
-	 * http://stackoverflow.com/questions/2880209/jpa-findbyexample
-	 * 
-	 * @return
-	 */
-	private List<Cabin> queryByExample() {
-		List<Cabin> retVal = null;
-		// Create a native EclipseLink query using QBE policy
-		QueryByExamplePolicy policy = new QueryByExamplePolicy();
-		policy.excludeDefaultPrimitiveValues();
-		ReadObjectQuery q = new ReadObjectQuery(cabin, policy);
-
-		// Wrap the native query in a standard JPA Query and execute it 
-		Query query = JpaHelper.createQuery(q, db); 
-		retVal =  query.getResultList();
 		return retVal;
 	}
 	

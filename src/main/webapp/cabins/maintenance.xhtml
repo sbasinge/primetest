@@ -42,6 +42,8 @@
 		<p:spacer height="10px" width="100%"/>
 		<h:commandButton id="addButton2" action="#{yahooLocatorService.loadCabins}" value="Add Yahoo Data" />
 		<p:spacer height="10px" width="100%"/>
+		<h:commandButton id="updateAmmenities" action="#{hockingHillsRentalsService.updateAllCabinAmmenities()}" value="Update Ammenities" />
+		<p:spacer height="10px" width="100%"/>
 		<p:outputPanel id="cabinList">
 			<p:dataTable id="cabinTable" value="#{cabinSearchBean.cabins}" var="_cabin">
 				<p:column>

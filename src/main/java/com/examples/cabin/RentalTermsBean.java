@@ -3,7 +3,6 @@ package com.examples.cabin;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -14,12 +13,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.examples.annotation.Transactional;
-import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.RentalTerms;
 
 @Named
 @ConversationScoped
 public class RentalTermsBean extends AbstractPageBean {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	Logger log = LoggerFactory.getLogger(RentalTermsBean.class);
 
 	@PersistenceContext

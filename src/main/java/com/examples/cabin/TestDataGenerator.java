@@ -24,6 +24,11 @@ import com.examples.cabin.entity.Review;
 @Named
 @ConversationScoped
 public class TestDataGenerator extends AbstractPageBean {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	Logger log = LoggerFactory.getLogger(TestDataGenerator.class);
  
 	@PersistenceContext
@@ -32,13 +37,12 @@ public class TestDataGenerator extends AbstractPageBean {
 	@Inject
 	Conversation conversation;
 
-	private List<String> rawTestData;
 	private List<Cabin> testData = new ArrayList<Cabin>();
 
 	public TestDataGenerator() {}
 	
 	@PostConstruct
-	private void setupTestData() {
+	public void setupTestData() {
 		Cabin cabin1 = new Cabin("Hemlock", new Address(null, "Hocking Hills",
 				State.OH, "43152", 39.464, -82.545), new RentalTerms(
 				new Integer(12), new BigDecimal(279), new BigDecimal(15),

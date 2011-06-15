@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.ConversationScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.UserTransaction;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -35,6 +33,10 @@ import com.examples.cabin.entity.Review;
 @Named
 @ConversationScoped
 public class YahooLocatorService extends AbstractPageBean  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Logger log = LoggerFactory.getLogger(YahooLocatorService.class);
 	static final String url = "http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=YahooDemo";
 

@@ -16,6 +16,11 @@ import com.examples.annotation.Transactional;
 @Transactional(rollback=true)
 @Interceptor
 public class RollbackTransactionInterceptor implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static Logger log = LoggerFactory
 			.getLogger(RollbackTransactionInterceptor.class);
 

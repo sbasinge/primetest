@@ -18,7 +18,6 @@ package com.examples.settings;
 import java.io.Serializable;
 import java.util.Map;
 
-import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -30,6 +29,11 @@ import org.slf4j.LoggerFactory;
 //@ConversationScoped
 @Named
 public class GuestPreferences implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	Logger log = LoggerFactory.getLogger(GuestPreferences.class);
 
 	private String theme = "pepper-grinder"; //default

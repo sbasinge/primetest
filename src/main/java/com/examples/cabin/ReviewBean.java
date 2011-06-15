@@ -8,6 +8,11 @@ import org.slf4j.LoggerFactory;
 import com.examples.cabin.entity.Review;
 
 public class ReviewBean extends AbstractPageBean {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	Logger log = LoggerFactory.getLogger(RentalTermsBean.class);
 
 	private Review review;

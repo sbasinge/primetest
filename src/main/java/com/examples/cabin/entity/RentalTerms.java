@@ -3,10 +3,6 @@ package com.examples.cabin.entity;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 @Entity
@@ -15,6 +11,10 @@ public class RentalTerms extends AbstractEntity {
 //	@GeneratedValue(strategy=GenerationType.IDENTITY)
 //	int id;
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Integer maxOccupants;
 	BigDecimal nightlyRental;
 	BigDecimal additionalPerPerson;

@@ -16,16 +16,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.cyberneko.html.parsers.DOMParser;
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.HTMLElementName;
+import net.htmlparser.jericho.Source;
+
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.examples.annotation.Transactional;
@@ -36,6 +35,8 @@ import com.examples.cabin.entity.Cabin;
 @Named
 @ConversationScoped
 public class HockingHillsRentalsService extends AbstractPageBean  {
+	private static final long serialVersionUID = 1L;
+
 	Logger log = LoggerFactory.getLogger(HockingHillsRentalsService.class);
 	static final String url = "http://www.hockinghillsrentals.com/index.htm";
 
@@ -57,19 +58,11 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	
 	@PostConstruct
 	public void init() {
-		log.info("Performing online update for {}",cabinSearchBean.getSelectedCabin().getName());
-		try {
-			findCabinAmmenities();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		log.info("Performing online update for {}",cabinSearchBean.getSelectedCabin().getName());
+//		findCabinAmmenities();
 	}
 
-	public void findCabinAmmenities() throws ParserConfigurationException, SAXException {
+	public void findCabinAmmenities() {
 		if (cabinSearchBean.getSelectedCabin() != null && cabinSearchBean.getSelectedCabin().getName().trim().length()!=0) {
 			searchTerm = cabinSearchBean.getSelectedCabin().getName();
 			execute();
@@ -80,7 +73,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	}
 
 	@Transactional
-	private void updateCabin(Cabin cabin) {
+	public void updateCabin(Cabin cabin) {
 		try {
 			em.persist(cabin);
 		} catch (Exception e) {
@@ -112,34 +105,24 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
-	public void execute() throws ParserConfigurationException, SAXException {
+	public void execute() {
 		String request = url;
 		log.info("Executing: {}",request);
 
 		// Send GET request
 		try {
-	        DOMParser parser = new DOMParser();
 			URL url = new URL(request);
 			InputStream stream = url.openStream();
-			InputSource source = new InputSource();
-			source.setByteStream(stream);
-			parser.parse(source);
-			Document doc = parser.getDocument();
-			NodeList tbodies = doc.getElementsByTagName("TBODY");
+			
+			Source source = new Source(stream);
+			List<Element> tablerows = source.getAllElements(HTMLElementName.TR);
+			tablerows = tablerows.subList(3, tablerows.size()); //first three rows are not cabins
 			results = new ArrayList<CabinAmmenities>();
-			for (int j =0; j < tbodies.getLength(); j++) {
-				Node tbody = tbodies.item(j);
-				log.info("Found tbody {} {}",tbody.getChildNodes().getLength(),printAttrs(tbody.getAttributes(),"  "));
-				for (int i =0; i<tbody.getChildNodes().getLength(); i++) {
-					Node tablerow = tbody.getChildNodes().item(i);
-					log.info("Found tablerow {} {}",tablerow.getChildNodes().getLength(),printAttrs(tablerow.getAttributes(),"  "));
-					if (tablerow.getAttributes() !=null && tablerow.getAttributes().getNamedItem("valign")!=null) {
-						log.info("target row: {}",tablerow.getTextContent());
-						if (tablerow.getTextContent().contains(searchTerm)) {
-							log.info("target row -- search match");
-							results.add(parseTableRow(tablerow));
-						}
-					}
+			for (Element tablerow : tablerows) {
+				log.info("Found tablerow {}",tablerow.getTextExtractor().toString());
+				if (tablerow.getTextExtractor().toString().contains(searchTerm)) {
+						log.info("target row -- search match");
+						results.add(parseTableRow(tablerow));
 				}
 			}
 		} catch (IOException e) {
@@ -166,80 +149,48 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	 * 15 - acerage text
 	 * 16 - additional text
 	**/
-	private CabinAmmenities parseTableRow(Node tablerow) {
+	private CabinAmmenities parseTableRow(Element tablerow) {
 		CabinAmmenities retVal = new CabinAmmenities();
+		List<Element> columns = tablerow.getAllElements(HTMLElementName.TD);
 		//column 1 has a <U><FONT><a></a>
-		Node column1 = tablerow.getChildNodes().item(1);
-		Node temp1 = column1.getFirstChild();
-		Node temp2 = temp1.getFirstChild();
-		NodeList temp2kids = temp2.getChildNodes();
-		NodeList temp1kids = temp1.getChildNodes();
-		Node temp = temp1kids.item(0);
+		Element column1 = columns.get(0);
+		Element a = column1.getAllElements(HTMLElementName.A).get(0);
+		log.info("temp is {}",a.getContent());
 		
-		retVal.setName(temp.getFirstChild().getTextContent());
-		retVal.setWebsiteLink(temp.getAttributes().getNamedItem("href").getNodeValue());
+		retVal.setName(a.getTextExtractor().toString());
+		retVal.setWebsiteLink(a.getAttributeValue("HREF"));
 		 
 		//column 2 has <FONT>
-		Node column2 = tablerow.getChildNodes().item(3);
-		retVal.setName(column2.getChildNodes().item(1).getTextContent());
+		Element column2 = columns.get(1);
+		retVal.setName(column2.getTextExtractor().toString());
 		
-		Node column3 = tablerow.getChildNodes().item(5);
-		retVal.setMaxOccupants(Integer.parseInt(column3.getChildNodes().item(1).getFirstChild().getTextContent()));
+		Element column3 = columns.get(2);
+		retVal.setMaxOccupants(Integer.parseInt(column3.getTextExtractor().toString()));
 		
-		Node column4 = tablerow.getChildNodes().item(7);
-		String priceLow = column4.getChildNodes().item(1).getFirstChild().getTextContent().substring(1);
+		Element column4 = columns.get(3);
+		String priceLow = column4.getTextExtractor().toString().substring(1);
 		retVal.setLowPrice(new BigDecimal(Double.parseDouble(priceLow)));
 
-		Node column6 = tablerow.getChildNodes().item(11);
-		String priceHigh = column6.getChildNodes().item(1).getFirstChild().getTextContent().substring(1);
+		Element column6 = columns.get(5);
+		String priceHigh = column6.getTextExtractor().toString().substring(1);
 		retVal.setHighPrice(new BigDecimal(Double.parseDouble(priceHigh)));
 
-		Node column7 = tablerow.getChildNodes().item(13);
-		temp = column7.getChildNodes().item(1).getFirstChild();
-		String numBedStr = temp.getTextContent();
-		int i = numBedStr.indexOf("\n");
-		retVal.setNumberOfBeds(Integer.parseInt(numBedStr.substring(0, i-1)));
+		Element column7 = columns.get(6);
+		String numBedStr = column7.getTextExtractor().toString();
+		int i = numBedStr.indexOf(" ");
+		retVal.setNumberOfBeds(Integer.parseInt(numBedStr.substring(0, i)));
 
-		Node column9 = tablerow.getChildNodes().item(17);
-		temp = column9.getChildNodes().item(1);
-		if (temp!=null)
+		Element column9 = columns.get(8);
+		if (column9.getAllElements(HTMLElementName.IMG).size()>0)
 			retVal.setHotTub(true);
 		
-		Node column10 = tablerow.getChildNodes().item(19);
-		temp = column10.getChildNodes().item(1);
-		if (temp!=null)
+		Element column10 = columns.get(9);
+		if (column10.getAllElements(HTMLElementName.IMG).size()>0)
 			retVal.setFireplace(true);
-		
-		Node column11 = tablerow.getChildNodes().item(21);
-		Node column12 = tablerow.getChildNodes().item(23);
-		Node column13 = tablerow.getChildNodes().item(25);
-		Node column14 = tablerow.getChildNodes().item(27);
-		Node column15 = tablerow.getChildNodes().item(29);
-		Node column16 = tablerow.getChildNodes().item(31);
+
 		return retVal;
 	}
 	
-    public void print(Node node, String indent) {
-        log.info(indent+node.getNodeName()+", "+node.getNodeType()+", "+node.getNodeValue()+", "+printAttrs(node.getAttributes(),indent));
-        Node child = node.getFirstChild();
-        while (child != null) {
-            print(child, indent+" ");
-            child = child.getNextSibling();
-        }
-    }
-    private String printAttrs(NamedNodeMap map, String indent) {
-    	String retVal = "";
-    	if (map != null) {
-    		for (int i=0; i < map.getLength(); i++) {
-    			Node temp = map.item(i);
-    			retVal+= temp.getNodeName()+", "+temp.getNodeValue()+"\n";
-    		}
-    	} else {
-    		retVal += indent+"None";
-    	}
-    	return retVal;
-    }
-
 	public String getSearchTerm() {
 		return searchTerm;
 	}
@@ -267,19 +218,12 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 
 	public static void main(String args[]) {
 		HockingHillsRentalsService service = new HockingHillsRentalsService();
-		service.setSearchTerm("Crockett's Lodge");
+//		service.setSearchTerm("Crockett's Lodge");
 //		service.setSearchTerm("The Shawnee"); //no hottub example
 //		service.setSearchTerm("Grand Butte Lodge");
+		service.setSearchTerm("Foxglove Lodge");
 		
-		try {
-			service.execute();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		service.execute();
 	}
 	
 
@@ -296,6 +240,27 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		//outta update the cabin and save.....
 		log.info("redirecting");
 		return "/cabins/list.jsf?faces-redirect=true";
+	}
+	
+	public void updateAllCabinAmmenities() {
+		//select all cabins
+		@SuppressWarnings("unchecked")
+		List<Cabin> cabins = (List<Cabin>) em.createNamedQuery("findAllCabins").getResultList();
+		//for each cabin call execute with the cabin name
+		for (Cabin cabin : cabins) {
+			searchTerm = cabin.getName();
+			execute();
+			//select the first of the results that come back
+			if (results.size()>0) {
+				CabinAmmenities ammenities = results.get(0);
+				
+				//update the ammenities
+				cabin.updateAmmenities(ammenities);
+				
+				//save the cabin
+				updateCabin(cabin);
+			}
+		}
 	}
 
 }

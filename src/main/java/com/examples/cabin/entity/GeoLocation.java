@@ -3,12 +3,7 @@ package com.examples.cabin.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -17,6 +12,10 @@ import org.primefaces.model.map.LatLng;
 //@Entity
 @Embeddable
 public class GeoLocation implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	double lat;
 	double lng;
 	

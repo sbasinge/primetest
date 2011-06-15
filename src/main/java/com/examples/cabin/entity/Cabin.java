@@ -4,13 +4,9 @@ package com.examples.cabin.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,12 +18,19 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.examples.service.CabinAmmenities;
+
 @Entity
 @NamedQueries(value={
 	@NamedQuery(name = "findMatchingCabins", query = "select c from Cabin c where c.address.state = :state"),
 	@NamedQuery(name = "findAllCabins", query = "select c from Cabin c")
 })
 public class Cabin extends AbstractEntity {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Transient
 	Logger log = LoggerFactory.getLogger(Cabin.class);
 
@@ -221,5 +224,11 @@ public class Cabin extends AbstractEntity {
 			retVal = reviews.get(reviews.size()-1);
 		}
 		return retVal;
+	}
+	
+	public void updateAmmenities(CabinAmmenities ammenities) {
+		setHotTub(ammenities.isHotTub());
+		setFirePlace(ammenities.isFireplace());
+		setUrl(ammenities.getWebsiteLink());
 	}
 }
