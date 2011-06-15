@@ -170,12 +170,15 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		CabinAmmenities retVal = new CabinAmmenities();
 		//column 1 has a <U><FONT><a></a>
 		Node column1 = tablerow.getChildNodes().item(1);
-		Node temp = column1.getFirstChild().getFirstChild().getChildNodes().item(0);
-		if (temp == null || temp instanceof Text)
-			temp = column1.getFirstChild().getFirstChild().getChildNodes().item(1);  //first row is different for some reason
+		Node temp1 = column1.getFirstChild();
+		Node temp2 = temp1.getFirstChild();
+		NodeList temp2kids = temp2.getChildNodes();
+		NodeList temp1kids = temp1.getChildNodes();
+		Node temp = temp1kids.item(0);
+		
 		retVal.setName(temp.getFirstChild().getTextContent());
 		retVal.setWebsiteLink(temp.getAttributes().getNamedItem("href").getNodeValue());
-		
+		 
 		//column 2 has <FONT>
 		Node column2 = tablerow.getChildNodes().item(3);
 		retVal.setName(column2.getChildNodes().item(1).getTextContent());

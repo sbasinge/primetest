@@ -50,7 +50,7 @@ public class Cabin extends AbstractEntity {
 	@OneToOne(cascade = CascadeType.ALL)
 	RentalTerms rentalTerms;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	List<Review> reviews;
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -135,11 +135,11 @@ public class Cabin extends AbstractEntity {
 		Double retval = 0d;
 		double totalRating = 0;
 		double totalReviews = 0;
-		for (Review review : getReviews()) {
-			log.info("reviewing rating comments {} and rating {}",review.getComments(),review.getRating());
-			totalRating += review.getRating();
-			totalReviews ++;
-		}
+//		for (Review review : getReviews()) {
+//			log.info("reviewing rating comments {} and rating {}",review.getComments(),review.getRating());
+//			totalRating += review.getRating();
+//			totalReviews ++;
+//		}
 		retval = totalReviews > 0 ? (totalRating / totalReviews) : 0;
 		log.info("getAverageRating for {} returning {}",name, retval);
 		return retval;
