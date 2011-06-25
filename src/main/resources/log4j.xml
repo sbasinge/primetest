@@ -100,7 +100,7 @@
    </category>
 
    <category name="org.hibernate">
-     <priority value="INFO" />
+     <priority value="DEBUG" />
    </category>
 
    <category name="com.examples">

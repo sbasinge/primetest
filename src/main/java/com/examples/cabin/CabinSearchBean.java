@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.PostRemove;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -35,7 +38,9 @@ import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.Cabin_;
 import com.examples.cabin.entity.RentalTerms;
 import com.examples.cabin.entity.RentalTerms_;
+import com.examples.service.GreetingDB;
 
+@Stateful
 //@SessionScoped
 @ConversationScoped
 @Named
@@ -47,8 +52,8 @@ public class CabinSearchBean extends AbstractPageBean {
 
 	Logger log = LoggerFactory.getLogger(CabinSearchBean.class);
 
-	@PersistenceContext
-	EntityManager db;
+	@PersistenceContext(type = PersistenceContextType.EXTENDED)
+    EntityManager db;
 
 	@Inject
 	Conversation conversation;
@@ -204,6 +209,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		return selectedCabin;
 	}
 
+	@Transactional
 	@SuppressWarnings("unchecked")
 	public void populateAllCabins() {
 		log.info("Populating all cabins");
@@ -281,10 +287,10 @@ public class CabinSearchBean extends AbstractPageBean {
 		Root<Cabin> root = query.from(Cabin.class);
 
 		Predicate temp = builder.conjunction();;
-		if(cabin.getAddress().getState()!=null) {
-			Join<Cabin,Address> address = root.join( Cabin_.address );
-			temp = builder.and(temp,builder.equal(address.get(Address_.state),cabin.getAddress().getState()));
-		}
+//		if(cabin.getAddress().getState()!=null) {
+//			Join<Cabin,Address> address = root.join( Cabin_.address );
+//			temp = builder.and(temp,builder.equal(address.get(Address_.state),cabin.getAddress().getState()));
+//		}
 		if (cabin.isFirePit()) {
 			temp = builder.and(temp,builder.isTrue(root.get(Cabin_.firePit)));
 		}

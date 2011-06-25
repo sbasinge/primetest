@@ -59,7 +59,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	@PostConstruct
 	public void init() {
 //		log.info("Performing online update for {}",cabinSearchBean.getSelectedCabin().getName());
-//		findCabinAmmenities();
+		findCabinAmmenities();
 	}
 
 	public void findCabinAmmenities() {
@@ -107,7 +107,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	 */
 	public void execute() {
 		String request = url;
-		log.info("Executing: {}",request);
+		log.info("Executing: {} {}",request,searchTerm);
 
 		// Send GET request
 		try {
@@ -168,17 +168,23 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		retVal.setMaxOccupants(Integer.parseInt(column3.getTextExtractor().toString()));
 		
 		Element column4 = columns.get(3);
-		String priceLow = column4.getTextExtractor().toString().substring(1);
-		retVal.setLowPrice(new BigDecimal(Double.parseDouble(priceLow)));
+		if (column4.getTextExtractor().toString().length()>0) {
+			String priceLow = column4.getTextExtractor().toString().substring(1);
+			retVal.setLowPrice(new BigDecimal(Double.parseDouble(priceLow)));
+		}
 
 		Element column6 = columns.get(5);
-		String priceHigh = column6.getTextExtractor().toString().substring(1);
-		retVal.setHighPrice(new BigDecimal(Double.parseDouble(priceHigh)));
+		if (column6.getTextExtractor().toString().length()>0) {
+			String priceHigh = column6.getTextExtractor().toString().substring(1);
+			retVal.setHighPrice(new BigDecimal(Double.parseDouble(priceHigh)));
+		}
 
 		Element column7 = columns.get(6);
-		String numBedStr = column7.getTextExtractor().toString();
-		int i = numBedStr.indexOf(" ");
-		retVal.setNumberOfBeds(Integer.parseInt(numBedStr.substring(0, i)));
+		if (column7.getTextExtractor().toString().length()>0) {
+			String numBedStr = column7.getTextExtractor().toString();
+			int i = numBedStr.indexOf(" ");
+			retVal.setNumberOfBeds(Integer.parseInt(numBedStr.substring(0, i)));
+		}
 
 		Element column9 = columns.get(8);
 		if (column9.getAllElements(HTMLElementName.IMG).size()>0)
@@ -242,6 +248,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		return "/cabins/list.jsf?faces-redirect=true";
 	}
 	
+	@Transactional
 	public void updateAllCabinAmmenities() {
 		//select all cabins
 		@SuppressWarnings("unchecked")
@@ -259,6 +266,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 				
 				//save the cabin
 				updateCabin(cabin);
+				break;
 			}
 		}
 	}

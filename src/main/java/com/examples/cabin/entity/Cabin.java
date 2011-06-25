@@ -18,6 +18,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.examples.annotation.Transactional;
 import com.examples.service.CabinAmmenities;
 
 @Entity
@@ -34,6 +35,7 @@ public class Cabin extends AbstractEntity {
 	@Transient
 	Logger log = LoggerFactory.getLogger(Cabin.class);
 
+	
 //	@Id
 //	@GeneratedValue(strategy=GenerationType.IDENTITY)
 //	int id;
@@ -53,7 +55,7 @@ public class Cabin extends AbstractEntity {
 	@OneToOne(cascade = CascadeType.ALL)
 	RentalTerms rentalTerms;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	List<Review> reviews;
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -134,17 +136,18 @@ public class Cabin extends AbstractEntity {
 		this.reviews = reviews;
 	}
 
+	@Transactional
 	public Double getAverageRating() {
 		Double retval = 0d;
 		double totalRating = 0;
 		double totalReviews = 0;
-//		for (Review review : getReviews()) {
+		for (Review review : getReviews()) {
 //			log.info("reviewing rating comments {} and rating {}",review.getComments(),review.getRating());
-//			totalRating += review.getRating();
-//			totalReviews ++;
-//		}
+			totalRating += review.getRating();
+			totalReviews ++;
+		}
 		retval = totalReviews > 0 ? (totalRating / totalReviews) : 0;
-		log.info("getAverageRating for {} returning {}",name, retval);
+//		log.info("getAverageRating for {} returning {}",name, retval);
 		return retval;
 	}
 	
