@@ -12,7 +12,6 @@ import javax.persistence.PostRemove;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.examples.annotation.Transactional;
 import com.examples.cabin.entity.RentalTerms;
 
 @Named
@@ -63,7 +62,7 @@ public class RentalTermsBean extends AbstractPageBean {
 		return rentalTerms;
 	}
 
-	@Transactional
+//	@Transactional
 	public String saveUpdates() {
 		boolean success = true;
 		log.info("Saving rentalTerms {}",rentalTerms);
@@ -85,7 +84,7 @@ public class RentalTermsBean extends AbstractPageBean {
 		return retVal;
 	}
 
-	@Transactional
+//	@Transactional
 	public String deleteSelected() {
 		boolean success = true;
 		log.info("Deleting cabin {}",rentalTerms);

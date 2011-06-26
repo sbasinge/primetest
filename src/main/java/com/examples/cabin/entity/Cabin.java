@@ -18,7 +18,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.examples.annotation.Transactional;
 import com.examples.service.CabinAmmenities;
 
 @Entity
@@ -136,7 +135,7 @@ public class Cabin extends AbstractEntity {
 		this.reviews = reviews;
 	}
 
-	@Transactional
+//	@Transactional
 	public Double getAverageRating() {
 		Double retval = 0d;
 		double totalRating = 0;

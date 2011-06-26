@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -31,14 +30,12 @@ import org.primefaces.model.map.Marker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.examples.annotation.Transactional;
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Address_;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.Cabin_;
 import com.examples.cabin.entity.RentalTerms;
 import com.examples.cabin.entity.RentalTerms_;
-import com.examples.service.GreetingDB;
 
 @Stateful
 //@SessionScoped
@@ -209,7 +206,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		return selectedCabin;
 	}
 
-	@Transactional
+//	@Transactional
 	@SuppressWarnings("unchecked")
 	public void populateAllCabins() {
 		log.info("Populating all cabins");
@@ -231,7 +228,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		return "/rentalTerms/edit.jsf?faces-redirect=true";
 	}
 
-	@Transactional
+//	@Transactional
 	public String saveUpdates() {
 		boolean success = true;
 		log.info("Saving cabin {}",selectedCabin);
@@ -250,7 +247,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		return retVal;
 	}
 
-	@Transactional
+//	@Transactional
 	public String deleteSelectedCabin() {
 		boolean success = true;
 		log.info("Deleting cabin {}",selectedCabin);
@@ -287,10 +284,10 @@ public class CabinSearchBean extends AbstractPageBean {
 		Root<Cabin> root = query.from(Cabin.class);
 
 		Predicate temp = builder.conjunction();;
-//		if(cabin.getAddress().getState()!=null) {
-//			Join<Cabin,Address> address = root.join( Cabin_.address );
-//			temp = builder.and(temp,builder.equal(address.get(Address_.state),cabin.getAddress().getState()));
-//		}
+		if(cabin.getAddress().getState()!=null) {
+			Join<Cabin,Address> address = root.join( Cabin_.address );
+			temp = builder.and(temp,builder.equal(address.get(Address_.state),cabin.getAddress().getState()));
+		}
 		if (cabin.isFirePit()) {
 			temp = builder.and(temp,builder.isTrue(root.get(Cabin_.firePit)));
 		}

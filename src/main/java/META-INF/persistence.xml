@@ -23,25 +23,37 @@
 		value="true"/> <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/> 
 		</properties> </persistence-unit> -->
 
+<!-- For glassfish 3.x -->
+<!-- 
 	<persistence-unit name="test" transaction-type="JTA">
 	    <provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>jdbc/primetest</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
 			<property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDataSource" />
 			<property name="hibernate.transaction.flush_before_completion" value="true" />
-<!-- 			
-    		<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/workbench"/>
-    		<property name="hibernate.connection.username" value="root"/>
-    		<property name="hibernate.connection.password" value="cannabis"/>
- -->    		
 		</properties>
 	</persistence-unit>
-
+ -->
+ 
+<!--  for jboss 6 -->
+  <persistence-unit name="test" transaction-type="JTA">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>java:/DefaultDS</jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="hibernate.transaction.flush_before_completion" value="true"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+    </properties>
+  </persistence-unit>
+  
 <!-- 
   <persistence-unit name="test" transaction-type="JTA">
     <description>Forge Persistence Unit</description>

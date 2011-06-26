@@ -15,7 +15,6 @@ import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.examples.annotation.Transactional;
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.RentalTerms;
@@ -69,7 +68,7 @@ public class TestDataGenerator extends AbstractPageBean {
 				"Reading", State.PA, "43152", 40.0, -80.0), null, null));
 	}
 
-	@Transactional(rollback=false)
+//	@Transactional(rollback=false)
 	public void loadTestData() {
 		
 		if (getNumberOfCabins() > 0) {
@@ -82,7 +81,7 @@ public class TestDataGenerator extends AbstractPageBean {
 		log.info("Test Data Loaded.");
 	}
 
-	@Transactional
+//	@Transactional
 	public void deleteExistingCabins() {
 		List<Cabin> results = em.createQuery("select c from Cabin c")
 				.getResultList();
