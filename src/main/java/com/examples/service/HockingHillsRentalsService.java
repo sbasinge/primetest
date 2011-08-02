@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ import com.examples.cabin.AbstractPageBean;
 import com.examples.cabin.CabinSearchBean;
 import com.examples.cabin.entity.Cabin;
 
-@Stateful
+//@Stateful
 @Named
 @ConversationScoped
 public class HockingHillsRentalsService extends AbstractPageBean  {
@@ -65,11 +64,19 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	public void findCabinAmmenities() {
 		if (cabinSearchBean.getSelectedCabin() != null && cabinSearchBean.getSelectedCabin().getName().trim().length()!=0) {
 			searchTerm = cabinSearchBean.getSelectedCabin().getName();
+			cleanSearchTerm();
 			execute();
 		} else {
 			addWarn(null,"Warning","Search term is empty");
 		}
 		
+	}
+
+	private void cleanSearchTerm() {
+		//remove plurals
+		if (searchTerm.endsWith("s")) {
+			searchTerm = searchTerm.substring(0,searchTerm.length()-1);
+		}
 	}
 
 	@Transactional
@@ -121,7 +128,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 			for (Element tablerow : tablerows) {
 				log.trace("Found tablerow {}",tablerow.getTextExtractor().toString());
 				if (tablerow.getTextExtractor().toString().contains(searchTerm)) {
-						log.info("target row -- search match");
+						log.info("target row -- search match {}",tablerow.getTextExtractor().toString());
 						results.add(parseTableRow(tablerow));
 				}
 			}

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
@@ -37,7 +36,7 @@ import com.examples.cabin.entity.Cabin_;
 import com.examples.cabin.entity.RentalTerms;
 import com.examples.cabin.entity.RentalTerms_;
 
-@Stateful
+//@Stateful
 //@SessionScoped
 @ConversationScoped
 @Named
