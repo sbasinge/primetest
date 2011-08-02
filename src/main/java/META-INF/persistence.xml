@@ -2,12 +2,17 @@
 <persistence version="2.0"
 	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-	<!-- <persistence-unit name="test"> <jta-data-source>jdbc/primetest</jta-data-source> 
-		<exclude-unlisted-classes>false</exclude-unlisted-classes> <properties> <property 
-		name="eclipselink.ddl-generation" value="create-tables" /> <property name="eclipselink.logging.level" 
-		value="FINE" /> <property name="eclipselinkjdbc.driver" value="org.apache.derby.jdbc.EmbeddedDataSource" 
-		/> <property name="eclipselink.exclude-eclipselink-orm" value="false"/> </properties> 
-		</persistence-unit> -->
+	<persistence-unit name="test">
+		<jta-data-source>jdbc/primetest</jta-data-source>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<properties>
+			<property name="eclipselink.ddl-generation" value="none" />
+			<property name="eclipselink.logging.level" value="FINE" />
+			<property name="eclipselinkjdbc.driver" value="org.apache.derby.jdbc.EmbeddedDataSource" />
+			<property name="eclipselink.exclude-eclipselink-orm" value="false" />
+		</properties>
+	</persistence-unit>
+		
 	<!-- <persistence-unit name="test"> <jta-data-source>jdbc/primetest</jta-data-source> 
 		<properties> <property name="eclipselink.logging.level" value="FINE" /> <property 
 		name="eclipselinkjdbc.driver" value="com.mysql.jdbc.Driver" /> <property 
@@ -41,6 +46,7 @@
  -->
  
 <!--  for jboss 6 -->
+<!-- 
   <persistence-unit name="test" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>java:/DefaultDS</jta-data-source>
@@ -53,7 +59,8 @@
       <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
     </properties>
   </persistence-unit>
-  
+ -->
+   
 <!-- 
   <persistence-unit name="test" transaction-type="JTA">
     <description>Forge Persistence Unit</description>

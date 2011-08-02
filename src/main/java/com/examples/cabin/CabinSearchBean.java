@@ -47,7 +47,7 @@ public class CabinSearchBean extends AbstractPageBean {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	Logger log = LoggerFactory.getLogger(CabinSearchBean.class);
+	private static final Logger log = LoggerFactory.getLogger(CabinSearchBean.class);
 
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
     EntityManager db;

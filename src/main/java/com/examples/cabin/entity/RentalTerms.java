@@ -3,7 +3,8 @@ package com.examples.cabin.entity;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
-import org.apache.commons.lang.builder.ToStringBuilder;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 public class RentalTerms extends AbstractEntity {

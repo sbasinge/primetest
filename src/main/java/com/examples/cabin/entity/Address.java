@@ -6,7 +6,9 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import org.apache.commons.lang.builder.ToStringBuilder;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.examples.cabin.State;
 
 @Entity

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
@@ -23,8 +24,6 @@ import net.htmlparser.jericho.Source;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import com.examples.annotation.Transactional;
@@ -32,12 +31,13 @@ import com.examples.cabin.AbstractPageBean;
 import com.examples.cabin.CabinSearchBean;
 import com.examples.cabin.entity.Cabin;
 
+@Stateful
 @Named
 @ConversationScoped
 public class HockingHillsRentalsService extends AbstractPageBean  {
 	private static final long serialVersionUID = 1L;
 
-	Logger log = LoggerFactory.getLogger(HockingHillsRentalsService.class);
+	static final Logger log = LoggerFactory.getLogger(HockingHillsRentalsService.class);
 	static final String url = "http://www.hockinghillsrentals.com/index.htm";
 
 	@PersistenceContext
@@ -119,7 +119,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 			tablerows = tablerows.subList(3, tablerows.size()); //first three rows are not cabins
 			results = new ArrayList<CabinAmmenities>();
 			for (Element tablerow : tablerows) {
-				log.info("Found tablerow {}",tablerow.getTextExtractor().toString());
+				log.trace("Found tablerow {}",tablerow.getTextExtractor().toString());
 				if (tablerow.getTextExtractor().toString().contains(searchTerm)) {
 						log.info("target row -- search match");
 						results.add(parseTableRow(tablerow));
@@ -155,7 +155,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		//column 1 has a <U><FONT><a></a>
 		Element column1 = columns.get(0);
 		Element a = column1.getAllElements(HTMLElementName.A).get(0);
-		log.info("temp is {}",a.getContent());
+		log.trace("temp is {}",a.getContent());
 		
 		retVal.setName(a.getTextExtractor().toString());
 		retVal.setWebsiteLink(a.getAttributeValue("HREF"));
@@ -202,7 +202,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	}
 
 	public void setSearchTerm(String searchTerm) {
-		log.debug("Setting searchTerm to {}",searchTerm);
+		log.trace("Setting searchTerm to {}",searchTerm);
 		this.searchTerm = searchTerm;
 	}
 
@@ -248,7 +248,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		return "/cabins/list.jsf?faces-redirect=true";
 	}
 	
-	@Transactional
+//	@Transactional
 	public void updateAllCabinAmmenities() {
 		//select all cabins
 		@SuppressWarnings("unchecked")
