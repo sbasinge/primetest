@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.PostRemove;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -36,7 +36,7 @@ import com.examples.cabin.entity.Cabin_;
 import com.examples.cabin.entity.RentalTerms;
 import com.examples.cabin.entity.RentalTerms_;
 
-//@Stateful
+@Stateful
 //@SessionScoped
 @ConversationScoped
 @Named
@@ -48,8 +48,8 @@ public class CabinSearchBean extends AbstractPageBean {
 
 	private static final Logger log = LoggerFactory.getLogger(CabinSearchBean.class);
 
-	@PersistenceContext(type = PersistenceContextType.EXTENDED)
-    EntityManager db;
+	@PersistenceContext
+    EntityManager db; 
 
 	@Inject
 	Conversation conversation;

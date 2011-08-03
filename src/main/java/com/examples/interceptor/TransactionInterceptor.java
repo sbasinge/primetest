@@ -43,6 +43,7 @@ public class TransactionInterceptor implements Serializable {
 			tx.begin();
 			Object result = invocation.proceed();
 			tx.commit();
+			log.info("TransactionInterceptor - commit");
 			return result;
 		} catch (Exception e) {
 			tx.rollback();

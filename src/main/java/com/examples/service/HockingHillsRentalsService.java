@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
@@ -30,7 +31,7 @@ import com.examples.cabin.AbstractPageBean;
 import com.examples.cabin.CabinSearchBean;
 import com.examples.cabin.entity.Cabin;
 
-//@Stateful
+@Stateful
 @Named
 @ConversationScoped
 public class HockingHillsRentalsService extends AbstractPageBean  {
@@ -77,6 +78,9 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		if (searchTerm.endsWith("s")) {
 			searchTerm = searchTerm.substring(0,searchTerm.length()-1);
 		}
+		
+		//remove punctuation
+		searchTerm.replace("[^\\w\\.\\s\\-]", "");
 	}
 
 	@Transactional
@@ -162,9 +166,9 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		//column 1 has a <U><FONT><a></a>
 		Element column1 = columns.get(0);
 		Element a = column1.getAllElements(HTMLElementName.A).get(0);
-		log.trace("temp is {}",a.getContent());
+		log.debug("temp is {}",a.getContent());
 		
-		retVal.setName(a.getTextExtractor().toString());
+		retVal.setCabinName(a.getTextExtractor().toString());
 		retVal.setWebsiteLink(a.getAttributeValue("HREF"));
 		 
 		//column 2 has <FONT>
@@ -247,10 +251,14 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	public void setSelectedAmmenities(CabinAmmenities selectedAmmenities) {
 		this.selectedAmmenities = selectedAmmenities;
 	}
+	
+//	@Transactional
 	public String onRowSelectNavigate(SelectEvent event) {
 		setSelectedAmmenities((CabinAmmenities) event.getObject());
 		log.info("Selected {}",getSelectedAmmenities().getCabinName());
 		//outta update the cabin and save.....
+		cabinSearchBean.getSelectedCabin().updateAmmenities(getSelectedAmmenities());
+		updateCabin(cabinSearchBean.getSelectedCabin());
 		log.info("redirecting");
 		return "/cabins/list.jsf?faces-redirect=true";
 	}

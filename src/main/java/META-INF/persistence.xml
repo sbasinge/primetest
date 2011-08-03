@@ -6,7 +6,7 @@
 		<jta-data-source>jdbc/primetest</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-			<property name="eclipselink.ddl-generation" value="none" />
+			<property name="eclipselink.ddl-generation" value="update" />
 			<property name="eclipselink.logging.level" value="FINE" />
 			<property name="eclipselinkjdbc.driver" value="org.apache.derby.jdbc.EmbeddedDataSource" />
 			<property name="eclipselink.exclude-eclipselink-orm" value="false" />

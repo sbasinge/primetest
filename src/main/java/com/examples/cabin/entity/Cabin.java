@@ -49,16 +49,16 @@ public class Cabin extends AbstractEntity {
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="ADDRESS_ID")
-	Address address = new Address();
+	Address address;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	RentalTerms rentalTerms = new RentalTerms();
+	RentalTerms rentalTerms;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-	List<Review> reviews = new ArrayList<Review>();
+	List<Review> reviews;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	List<Bedroom> bedrooms = new ArrayList<Bedroom>();
+	List<Bedroom> bedrooms;
 
 	public Cabin() {
 //		address = new Address();
@@ -232,6 +232,8 @@ public class Cabin extends AbstractEntity {
 		setHotTub(ammenities.isHotTub());
 		setFirePlace(ammenities.isFireplace());
 		setUrl(ammenities.getWebsiteLink());
+		if (getRentalTerms() == null)
+			rentalTerms = new RentalTerms();
 		getRentalTerms().setNightlyRental(ammenities.getHighPrice());
 		log.info("Ammenities updated: {}",this);
 	}
