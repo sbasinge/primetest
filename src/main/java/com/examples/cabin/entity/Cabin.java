@@ -217,7 +217,7 @@ public class Cabin extends AbstractEntity {
 	 * @return
 	 */
 	public double getNightlyRate() {
-		return getRentalTerms() != null ? getRentalTerms().getNightlyRental().doubleValue() : 0;
+		return (getRentalTerms() != null && getRentalTerms().getNightlyRental() != null) ? getRentalTerms().getNightlyRental().doubleValue() : 0;
 	}
 	
 	public Review getLastReview() {

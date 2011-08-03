@@ -15,6 +15,7 @@ import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.examples.annotation.Transactional;
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.RentalTerms;
@@ -81,7 +82,7 @@ public class TestDataGenerator extends AbstractPageBean {
 		log.info("Test Data Loaded.");
 	}
 
-//	@Transactional
+	@Transactional
 	public void deleteExistingCabins() {
 		List<Cabin> results = em.createQuery("select c from Cabin c")
 				.getResultList();
