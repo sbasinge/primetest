@@ -7,7 +7,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -19,6 +18,10 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.map.OverlaySelectEvent;
@@ -38,8 +41,9 @@ import com.examples.cabin.entity.RentalTerms_;
 
 @Stateful
 //@SessionScoped
-@ConversationScoped
+//@ConversationScoped
 @Named
+@Path(value = "/cabins")
 public class CabinSearchBean extends AbstractPageBean {
 	/**
 	 * 
@@ -85,8 +89,8 @@ public class CabinSearchBean extends AbstractPageBean {
 		cabin = new Cabin();
 		cabin.setAddress(new Address());
 		log.debug("Creating cabin: {}", cabin);
-		conversation.begin();
-		log.info("Conversation begin {}", conversation.getId());
+//		conversation.begin();
+//		log.info("Conversation begin {}", conversation.getId());
 		populateAllCabins();
 		calculateMinAndMaxPrices();
 	}
@@ -118,6 +122,9 @@ public class CabinSearchBean extends AbstractPageBean {
 		this.cabins = cabins;
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path(value = "/list")
 	public List<Cabin> getCabins() {
 		log.info("GetCabins returning {} cabins.",cabins.size());
 		return cabins;

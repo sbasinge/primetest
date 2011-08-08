@@ -55,6 +55,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	
 	CabinAmmenities selectedAmmenities;
 
+	List<Element> tablerows;
 	
 	@PostConstruct
 	public void init() {
@@ -86,6 +87,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 	@Transactional
 	public void updateCabin(Cabin cabin) {
 		try {
+			em.merge(cabin);
 			em.persist(cabin);
 		} catch (Exception e) {
 			log.error("Error loading cabin",e);
@@ -120,14 +122,16 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		String request = url;
 		log.info("Executing: {} {}",request,searchTerm);
 
-		// Send GET request
 		try {
-			URL url = new URL(request);
-			InputStream stream = url.openStream();
-			
-			Source source = new Source(stream);
-			List<Element> tablerows = source.getAllElements(HTMLElementName.TR);
-			tablerows = tablerows.subList(3, tablerows.size()); //first three rows are not cabins
+			if (tablerows == null) {
+				// Send GET request
+				URL url = new URL(request);
+				InputStream stream = url.openStream();
+				
+				Source source = new Source(stream);
+				tablerows = source.getAllElements(HTMLElementName.TR);
+				tablerows = tablerows.subList(3, tablerows.size()); //first three rows are not cabins
+			}
 			results = new ArrayList<CabinAmmenities>();
 			for (Element tablerow : tablerows) {
 				log.trace("Found tablerow {}",tablerow.getTextExtractor().toString());
@@ -181,13 +185,15 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 		Element column4 = columns.get(3);
 		if (column4.getTextExtractor().toString().length()>0) {
 			String priceLow = column4.getTextExtractor().toString().substring(1);
-			retVal.setLowPrice(new BigDecimal(Double.parseDouble(priceLow)));
+			if (priceLow != null && priceLow.length()>0)
+				retVal.setLowPrice(new BigDecimal(Double.parseDouble(priceLow)));
 		}
 
 		Element column6 = columns.get(5);
 		if (column6.getTextExtractor().toString().length()>0) {
 			String priceHigh = column6.getTextExtractor().toString().substring(1);
-			retVal.setHighPrice(new BigDecimal(Double.parseDouble(priceHigh)));
+			if (priceHigh != null && priceHigh.length()>0)
+				retVal.setHighPrice(new BigDecimal(Double.parseDouble(priceHigh)));
 		}
 
 		Element column7 = columns.get(6);
@@ -281,7 +287,7 @@ public class HockingHillsRentalsService extends AbstractPageBean  {
 				
 				//save the cabin
 				updateCabin(cabin);
-				break;
+//				break;
 			}
 		}
 	}

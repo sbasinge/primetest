@@ -13,6 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import com.examples.service.CabinAmmenities;
 	@NamedQuery(name = "findMatchingCabins", query = "select c from Cabin c where c.address.state = :state"),
 	@NamedQuery(name = "findAllCabins", query = "select c from Cabin c")
 })
+@XmlRootElement
 public class Cabin extends AbstractEntity {
 	/**
 	 * 
@@ -217,7 +219,7 @@ public class Cabin extends AbstractEntity {
 	 * @return
 	 */
 	public double getNightlyRate() {
-		return getRentalTerms() != null ? getRentalTerms().getNightlyRental().doubleValue() : 0;
+		return (getRentalTerms() != null && getRentalTerms().getNightlyRental() != null) ? getRentalTerms().getNightlyRental().doubleValue() : 0;
 	}
 	
 	public Review getLastReview() {
