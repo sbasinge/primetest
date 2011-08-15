@@ -3,6 +3,7 @@ package com.examples.cabin;
 
 public enum State {
 	OH("Ohio"),
+	WV("West Virginia"),
 	PA("Pennsylvania");
 	
 	private String name;

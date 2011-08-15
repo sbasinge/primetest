@@ -18,7 +18,7 @@
 		<primefaces.version>2.2-SNAPSHOT</primefaces.version>
 		<primefaces.version>3.0.M1</primefaces.version> 
 		 -->
-		<primefaces.version>2.2.RC2</primefaces.version>
+		<primefaces.version>3.0.M2</primefaces.version>
 
 	</properties>
 
