@@ -14,10 +14,7 @@
 		<glassfish.embedded.version>3.1-b04</glassfish.embedded.version>
 		<junit.version>4.8.1</junit.version>
 		<slf4j.version>1.5.9.RC1</slf4j.version>
-		<!-- 
-		<primefaces.version>2.2-SNAPSHOT</primefaces.version>
-		<primefaces.version>3.0.M1</primefaces.version> 
-		 -->
+		<!-- <primefaces.version>2.2-SNAPSHOT</primefaces.version> <primefaces.version>3.0.M1</primefaces.version> -->
 		<primefaces.version>3.0.M2</primefaces.version>
 
 	</properties>
@@ -33,6 +30,45 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.jboss.as.plugins</groupId>
+				<artifactId>jboss-as-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>deploy-driver</id>
+						<phase>package</phase>
+						<configuration>
+							<groupId>mysql</groupId>
+							<artifactId>mysql-connector-java</artifactId>
+							<name>mysql-connector-java-5.1.14.jar</name>
+						</configuration>
+						<goals>
+							<goal>deploy-artifact</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>add-datasource</id>
+						<phase>install</phase>
+						<configuration>
+							<address>subsystem=datasources,data-source=cabinDatasource</address>
+							<properties>
+								<connection-url>jdbc:mysql://localhost:3306/cabins</connection-url>
+								<jndi-name>java:jboss/datasources/CabinDS</jndi-name>
+								<enabled>true</enabled>
+								<pool-name>cabinPool</pool-name>
+								<user-name>root</user-name>
+								<password>admin</password>
+								<driver-name>mysql-connector-java-5.1.14.jar</driver-name>
+							</properties>
+						</configuration>
+						<goals>
+							<goal>add-resource</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
@@ -107,20 +143,14 @@
 			<version>${glassfish.embedded.version}</version>
 			<scope>test</scope>
 		</dependency>
-<!-- 		
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.5.0-Final</version>
-		</dependency>
-	 -->
+		<!-- <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-entitymanager</artifactId> <version>3.5.0-Final</version> </dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>3.6.4.Final</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.htmlparser.jericho</groupId>
 			<artifactId>jericho-html</artifactId>
