@@ -1,5 +1,6 @@
 package com.examples.cabin;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -176,7 +179,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		log.info("Marker selected for {}", marker.getLatlng());
 		for (Cabin cabin: cabins) {
 			if (cabin.getId()==id) {
-				selectedCabin = cabin;
+				setSelectedCabin(cabin);
 				break;
 			}
 		}
@@ -197,6 +200,8 @@ public class CabinSearchBean extends AbstractPageBean {
 
 	public void setSelectedCabin(Cabin selectedCabin) {
 		this.selectedCabin = selectedCabin;
+		db.merge(getSelectedCabin());
+		getSelectedCabin().populateAverageRating();
 		log.info("Cabin selected {}", selectedCabin);
 		addInfo("msgs","select","cabin selected.");
 	}
@@ -205,7 +210,6 @@ public class CabinSearchBean extends AbstractPageBean {
 		return selectedCabin;
 	}
 
-//	@Transactional
 	@SuppressWarnings("unchecked")
 	public void populateAllCabins() {
 		log.info("Populating all cabins");
@@ -213,12 +217,23 @@ public class CabinSearchBean extends AbstractPageBean {
 		//calc high and low prices
 	}
 
-	public String onRowSelectNavigate(SelectEvent event) {
-//		FacesContext.getCurrentInstance().getExternalContext().getFlash()
-//				.put("selectedCabin", event.getObject());
-		setSelectedCabin((Cabin) event.getObject());
+	public void onRowSelectNavigate(SelectEvent event) {
+		Object temp = event.getObject();
+//		FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedCabin", temp);
+		setSelectedCabin((Cabin) temp);
+		db.merge(getSelectedCabin());
+		getSelectedCabin().populateAverageRating();
 		log.info("redirecting");
-		return "edit.jsf?faces-redirect=true";
+//		return "edit.jsf";
+		String url = "edit.jsf?cid="+this.conversation.getId();
+//		String url = "edit.jsf?";
+		FacesContext fc = FacesContext.getCurrentInstance();
+		ExternalContext ec = fc.getExternalContext();
+		try {
+		        ec.redirect(url);
+		} catch (IOException ex) {
+		        log.warn("uh oh",ex);
+		}
 	}
 
 	public String onRentalRowSelectNavigate(SelectEvent event) {
@@ -400,5 +415,11 @@ public class CabinSearchBean extends AbstractPageBean {
 	public String updateAmmenities() {
 		String retVal = "/ammenities/list.jsf?faces-redirect=true";
 		return retVal;
+	}
+	
+	public String gotoEditPage() {
+		log.info("redirecting");
+		return "edit.jsf?faces-redirect=true";
+		
 	}
 }

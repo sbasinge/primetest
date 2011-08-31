@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
-import javax.inject.Inject;
+import javax.ejb.Stateful;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,14 +14,15 @@ import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.examples.annotation.Transactional;
 import com.examples.cabin.entity.Address;
 import com.examples.cabin.entity.Cabin;
 import com.examples.cabin.entity.RentalTerms;
 import com.examples.cabin.entity.Review;
 
+@Stateful
+//@ConversationScoped
+@RequestScoped
 @Named
-@ConversationScoped
 public class TestDataGenerator extends AbstractPageBean {
 	/**
 	 * 
@@ -34,8 +34,8 @@ public class TestDataGenerator extends AbstractPageBean {
 	@PersistenceContext
 	EntityManager em;
 
-	@Inject
-	Conversation conversation;
+//	@Inject
+//	Conversation conversation;
 
 	private List<Cabin> testData = new ArrayList<Cabin>();
 
@@ -77,12 +77,13 @@ public class TestDataGenerator extends AbstractPageBean {
 		}
 
 		for (Cabin cabin : testData) {
+			log.debug("Adding cabin {}",cabin.getName());
 			em.persist(cabin);
 		}
 		log.info("Test Data Loaded.");
 	}
 
-	@Transactional
+//	@Transactional
 	public void deleteExistingCabins() {
 		List<Cabin> results = em.createQuery("select c from Cabin c")
 				.getResultList();

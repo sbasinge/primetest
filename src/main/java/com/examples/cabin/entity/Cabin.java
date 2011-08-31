@@ -13,6 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import com.examples.service.CabinAmmenities;
 	@NamedQuery(name = "findMatchingCabins", query = "select c from Cabin c where c.address.state = :state"),
 	@NamedQuery(name = "findAllCabins", query = "select c from Cabin c")
 })
+@XmlRootElement
 public class Cabin extends AbstractEntity {
 	/**
 	 * 
@@ -46,6 +48,8 @@ public class Cabin extends AbstractEntity {
 	boolean firePit;
 	boolean firePlace;
 	String phoneNumber;
+	@Transient
+	double averageRating;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="ADDRESS_ID")
@@ -57,7 +61,7 @@ public class Cabin extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	List<Review> reviews;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	List<Bedroom> bedrooms;
 
 	public Cabin() {
@@ -136,8 +140,7 @@ public class Cabin extends AbstractEntity {
 	}
 
 //	@Transactional
-	public Double getAverageRating() {
-		Double retval = 0d;
+	public void populateAverageRating() {
 		double totalRating = 0;
 		double totalReviews = 0;
 		for (Review review : getReviews()) {
@@ -145,9 +148,9 @@ public class Cabin extends AbstractEntity {
 			totalRating += review.getRating();
 			totalReviews ++;
 		}
-		retval = totalReviews > 0 ? (totalRating / totalReviews) : 0;
+		averageRating = totalReviews > 0 ? (totalRating / totalReviews) : 0;
 //		log.info("getAverageRating for {} returning {}",name, retval);
-		return retval;
+//		return retval;
 	}
 	
 	public void addReview(Review review) {
@@ -236,5 +239,13 @@ public class Cabin extends AbstractEntity {
 			rentalTerms = new RentalTerms();
 		getRentalTerms().setNightlyRental(ammenities.getHighPrice());
 		log.info("Ammenities updated: {}",this);
+	}
+
+	public double getAverageRating() {
+		return averageRating;
+	}
+
+	public void setAverageRating(double averageRating) {
+		this.averageRating = averageRating;
 	}
 }

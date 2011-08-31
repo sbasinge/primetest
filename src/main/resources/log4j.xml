@@ -72,7 +72,6 @@
 
    <!-- Buffer events and log them asynchronously -->
    <appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
-     <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
      <appender-ref ref="FILE"/>
      <appender-ref ref="CONSOLE"/>
    </appender>
@@ -104,12 +103,11 @@
    </category>
 
    <category name="com.examples">
-     <priority value="DEBUG" />
+     <priority value="ALL" />
    </category>
 
 
    <root>
-     <appender-ref ref="FILE"/>
-     <appender-ref ref="CONSOLE"/>
+     <appender-ref ref="ASYNC"/>
    </root>
 </log4j:configuration>

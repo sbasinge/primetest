@@ -41,7 +41,6 @@
 		<p:spacer height="10px" width="100%"/>
 		<p:spacer height="10px" width="100%"/>
 		<p:commandButton id="searchButton" action="#{cabinSearchBean.search}" value="Search" update="cabinList, mapPanel">
-			<f:param name="cid" value="#{cabinSearchBean.conversation.id}" />
 		</p:commandButton>
 		<p:spacer height="10px" width="100%"/>
 		<p:outputPanel id="cabinList">
@@ -54,12 +53,19 @@
 		</p:outputPanel>
 	</ui:define>
 	<ui:define name="content">
-		<p:outputPanel id="mapPanel">
-			<p:gmap id="map" center="#{cabinSearchBean.mapCenter.lat},#{cabinSearchBean.mapCenter.lng}" zoom="10" type="HYBRID"
-				style="width:100%;height:740px" model="#{cabinSearchBean.mapModel}"
-				overlaySelectListener="#{cabinSearchBean.onMarkerSelect}" rendered="#{not empty cabinSearchBean.cabins}">
-			</p:gmap>
+  
+    <p:growl id="growl" showDetail="true"/>  
+ 		<p:outputPanel id="mapPanel">
+		    <p:gmap center="#{cabinSearchBean.mapCenter.lat},#{cabinSearchBean.mapCenter.lng}" zoom="10" type="HYBRID" model="#{cabinSearchBean.mapModel}" style="width:100%;height:740px">  
+               <p:ajax event="overlaySelect" listener="#{cabinSearchBean.onMarkerSelect}" update="gmapInfoWindow" />
+ 				<p:gmapInfoWindow id="gmapInfoWindow">  
+					<p:outputPanel style="text-align:center;display:block;margin:auto:">  
+						<h:outputText id="ratingLabel" value="Average Rating" />
+						<h:outputText id="ratingLabel2" value="#{cabinSearchBean.defaultRating}" />
+ 					</p:outputPanel>  
+				</p:gmapInfoWindow>  
+			</p:gmap>  
 		</p:outputPanel>
-
+  
 	</ui:define>
 </ui:composition>
