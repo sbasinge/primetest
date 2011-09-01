@@ -179,7 +179,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		log.info("Marker selected for {}", marker.getLatlng());
 		for (Cabin cabin: cabins) {
 			if (cabin.getId()==id) {
-				setSelectedCabin(cabin);
+				selectedCabin = cabin;
 				break;
 			}
 		}
