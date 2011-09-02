@@ -179,7 +179,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		log.info("Marker selected for {}", marker.getLatlng());
 		for (Cabin cabin: cabins) {
 			if (cabin.getId()==id) {
-				selectedCabin = cabin;
+				setSelectedCabin(cabin);
 				break;
 			}
 		}
@@ -199,8 +199,8 @@ public class CabinSearchBean extends AbstractPageBean {
 	}
 
 	public void setSelectedCabin(Cabin selectedCabin) {
-		this.selectedCabin = selectedCabin;
-		db.merge(getSelectedCabin());
+		Cabin temp = db.find(Cabin.class, selectedCabin.getId());
+		this.selectedCabin = temp;
 		getSelectedCabin().populateAverageRating();
 		log.info("Cabin selected {}", selectedCabin);
 		addInfo("msgs","select","cabin selected.");
@@ -214,19 +214,25 @@ public class CabinSearchBean extends AbstractPageBean {
 	public void populateAllCabins() {
 		log.info("Populating all cabins");
 		cabins = db.createNamedQuery("findAllCabins").getResultList();
+		populateCabinsAvgRating();
 		//calc high and low prices
 	}
 
+	private void populateCabinsAvgRating() {
+		for (Cabin cabin : getCabins()) {
+			cabin.populateAverageRating();
+		}
+	}
+	
+	public int getNumCabins() {
+		return getCabins().size();
+	}
+	
 	public void onRowSelectNavigate(SelectEvent event) {
 		Object temp = event.getObject();
-//		FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedCabin", temp);
 		setSelectedCabin((Cabin) temp);
-		db.merge(getSelectedCabin());
-		getSelectedCabin().populateAverageRating();
 		log.info("redirecting");
-//		return "edit.jsf";
 		String url = "edit.jsf?cid="+this.conversation.getId();
-//		String url = "edit.jsf?";
 		FacesContext fc = FacesContext.getCurrentInstance();
 		ExternalContext ec = fc.getExternalContext();
 		try {
@@ -277,6 +283,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		if (success) {
 			addInfo("msgs","Removed","cabnin removed..");
 		}
+		endConversation();
 		return retVal;
 	}
 
@@ -322,6 +329,7 @@ public class CabinSearchBean extends AbstractPageBean {
 		if (this.getRating() >= 1) {
 			List<Cabin> tempResult = new ArrayList<Cabin>();
 			for (Cabin cabin: retVal) {
+				cabin.populateAverageRating();
 				if (cabin.getAverageRating()>= getRating()) {
 					tempResult.add(cabin);
 				}

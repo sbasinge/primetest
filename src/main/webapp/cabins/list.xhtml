@@ -8,9 +8,8 @@
 	<ui:define name="content">
 		<p:spacer height="30px;" width="100%"/>
 			<p:dataTable id="cabinTable" value="#{cabinSearchBean.cabins}" var="_cabin" paginator="false" selection="#{cabinSearchBean.selectedCabin}" selectionMode="single" dblClickSelect="true">
-		        <p:ajax event="rowSelect" listener="#{cabinSearchBean.onRowSelectNavigate}">
-		        	<f:attribute name="cid" value="#{cabinSearchBean.conversation.id}" />
-		        </p:ajax>  
+	        	<f:param name="cid" value="#{cabinSearchBean.conversation.id}" />
+		        <p:ajax event="rowSelect" listener="#{cabinSearchBean.onRowSelectNavigate}"/>
 				<p:column sortBy="#{_cabin.id}">
 					<f:facet name="header">ID</f:facet>
 					<h:outputText value="#{_cabin.id}" />
@@ -19,6 +18,35 @@
 					<f:facet name="header">Name</f:facet>
 					<h:outputText value="#{_cabin.name}" />
 				</p:column>
+				<p:column sortBy="#{_cabin.address.id}">
+					<f:facet name="header">Address ID</f:facet>
+					<h:outputText value="#{_cabin.address.id}" />
+				</p:column>
+				<p:column sortBy="#{_cabin.address.city}">
+					<f:facet name="header">City</f:facet>
+					<h:outputText value="#{_cabin.address.city}" />
+				</p:column>
+				<p:column sortBy="#{_cabin.address.state.name}">
+					<f:facet name="header">State</f:facet>
+					<h:outputText value="#{_cabin.address.state.name}" />
+				</p:column>
+				<p:column sortBy="#{_cabin.address.zipCode}">
+					<f:facet name="header">Zip</f:facet>
+					<h:outputText value="#{_cabin.address.zipCode}" />
+				</p:column>
+				<p:column sortBy="#{_cabin.rentalTerms.nightlyRental}">
+					<f:facet name="header">Nightly Rate</f:facet>
+					<h:outputText value="#{_cabin.rentalTerms.nightlyRental}">
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" type="currency" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{_cabin.averageRating}">
+					<f:facet name="header">Rating</f:facet>
+					<h:outputText value="#{_cabin.averageRating}">
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+					</h:outputText>
+				</p:column>
+				
 			</p:dataTable>
 	</ui:define>
 </ui:composition>
