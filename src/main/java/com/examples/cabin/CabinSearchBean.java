@@ -231,14 +231,14 @@ public class CabinSearchBean extends AbstractPageBean {
 	public void onRowSelectNavigate(SelectEvent event) {
 		Object temp = event.getObject();
 		setSelectedCabin((Cabin) temp);
-		log.info("redirecting");
+		log.info("redirecting: cid={}",this.conversation.getId());
 		String url = "edit.jsf?cid="+this.conversation.getId();
 		FacesContext fc = FacesContext.getCurrentInstance();
 		ExternalContext ec = fc.getExternalContext();
 		try {
-		        ec.redirect(url);
+			ec.redirect(url);
 		} catch (IOException ex) {
-		        log.warn("uh oh",ex);
+			log.warn("uh oh",ex);
 		}
 	}
 
